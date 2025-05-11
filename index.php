@@ -21,8 +21,6 @@
     </head>
     <!-- end Head -->
 
-
-
     <!-- start Body -->
     <body>
         <div class="grid-row">
@@ -30,22 +28,23 @@
             <!-- start Header -->
             <header class="header full-width">
                 <!-- Logo -->
-                <h1 class="hide-on-mobile logo-container absolute block full-width align--center"><img class="logo--desktop" src="/img/desktop-logo.svg" alt="Viking Tours" title="Viking Tours"></h1>
+                <h1 class="hide-on-mobile logo-container absolute block full-width align--center"><img class="logo--desktop" src="./img/desktop-logo.svg" alt="Viking Tours" title="Viking Tours"></h1>
                 
                 <!-- Social links -->
                 <ul class="pt1 no-bullets align--center hide-on-mobile">
-                    <li><a class="link link--default" href="https://www.twitter.com"><img class="icon" src="/img/facebook.svg" alt="Facebook"></a></li>
-                    <li><a class="link link--default" href="https://www.instagram.com"><img class="icon" src="/img/instagram.svg" alt="Instagram"></a></li>
-                    <li><a class="link link--default" href="https://www.facebook.com"><img class="icon" src="/img/twitter.svg" alt="Twitter"></a></li>
+                    <li><a class="link link--default" href="https://www.twitter.com"><img class="icon" src="./img/facebook.svg" alt="Facebook"></a></li>
+                    <li><a class="link link--default" href="https://www.instagram.com"><img class="icon" src="./img/instagram.svg" alt="Instagram"></a></li>
+                    <li><a class="link link--default" href="https://www.facebook.com"><img class="icon" src="./img/twitter.svg" alt="Twitter"></a></li>
                 </ul>
             </header>
             <!-- end Header -->
             
-            <!-- Hero image -->
+            <!-- start Canvas -->
             <div class="hero-container full-width show-on-mobile pt1 pl2 pr2">
-                <div class="hero full-width full-height" style="background:rgba(0,0,0,0) url(/img/1.jpg) no-repeat scroll center center/cover"></div>
+                <div class="hero full-width full-height" style="background:rgba(0,0,0,0) url(./img/1.jpg) no-repeat scroll center center/cover"></div>
             </div>
-            <div class="hide-on-mobile hero" style="background:rgba(0,0,0,0) url(/img/1.jpg) no-repeat scroll center center/cover"></div>
+            <div class="hide-on-mobile hero" style="background:rgba(0,0,0,0) url(./img/1.jpg) no-repeat scroll center center/cover"></div>
+            <!-- end Canvas -->
 
             <!-- Body -->
             <div class="body full-width">
@@ -53,13 +52,23 @@
                     <!-- Navigation -->
                     <nav class="navigation border--bottom pt1">
                         <ul class="no-bullets list--inline pb1 bold">
-                            <li class="small mr2"><a class="link link--text current" href="/">Character</a></li>
-                            <li class="small mr2"><a class="link link--text" href="/destinations.html">Skills</a></li>
-                            <li class="small mr2"><a class="link link--text" href="/pricing.html">Trend</a></li>
-                            <li class="small"><a class="link link--text" href="/contact.html">My Profile</a></li>
+                            <li class="small mr2"><a class="link link--text current" href="./">Character</a></li>
+                            <li class="small mr2"><a class="link link--text" href="./destinations.html">Skills</a></li>
+                            <li class="small mr2"><a class="link link--text" href="./pricing.html">Trend</a></li>
+                            <li class="small mr2"><a class="link link--text" href="./contact.html">My Profile</a></li>
+                            <li class="small">
+                                <?php
+                                    if( isset($_COOKIE["account"]) && !empty($_COOKIE["account"]) ){
+                                        echo '<a href="signout.php" class="link link--text">'.htmlspecialchars($_COOKIE['account']).'</a>';
+                                    } else {
+                                        echo '<a href="sign.php" class="link link--text">Sign</a>';
+                                    }
+                                ?>
+                            </li>
                         </ul>
                     </nav>
                 </div>
+
                 <!-- Navigation -->
                 <!-- <nav class="navigation border--bottom pt1">
                     <ul class="no-bullets list--inline pb1 bold">
