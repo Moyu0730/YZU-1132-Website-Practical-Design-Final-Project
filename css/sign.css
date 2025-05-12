@@ -1,0 +1,166 @@
+/* Sign Page CSS */
+
+    /* Form */
+        /* Input Box */
+            .input-box{
+                /* Width and Height */
+                width: 100%;
+                
+                /* Decoration */
+                background-color: #E0E0E0;
+
+                /* Shadow */
+                transition: box-shadow 0.2s, background-color 0.2s, transform 0.2s;
+                box-shadow: none;
+
+                /* Border */
+                border: none;
+                outline: none;
+                border-radius: 4px;
+
+                /* Text */
+                font-size: 17px;
+
+                /* Spacing */
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+
+            .input-box:focus{
+                /* Shadow */
+                background-color: white;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+                transform: translateY(-2px);
+            }
+
+        /* Div */
+        .div{
+            /* Layout */
+            display: flex;
+            gap: 10px;
+            flex-direction: row;
+            justify-content: space-between;
+
+            /* Spacing */
+            padding-top: 5px;
+            padding-bottom: 10px;
+        }
+
+        /* Label */
+        .label{
+            /* Text */
+            color: #7B7B7B;
+            font-weight: 200;
+            margin-bottom: 4px;
+        }
+
+        /* NickName and UserName */
+            /* NickName */
+            .div-nickname{
+                /* Width and Height */
+                width: 20%;
+
+                /* Alignment */
+                display: flex; 
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            /* UserName */
+            .div-username{
+                /* Width and Height */
+                width: 20%;
+
+                /* Alignment */
+                display: flex; 
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+
+    /* Button */
+    .submit-btn{
+        /* Width and Height */
+        width: 100%;
+
+        /* Decoration */
+        border-radius: 5px;
+        background-color: #4576b6;
+
+        /* Shadow */
+        transition: box-shadow 0.2s, background-color 0.2s, transform 0.2s;
+        box-shadow: none;
+
+        /* Border */
+        border: none;
+        outline: none;
+        border-radius: 4px;
+
+        /* Text */
+        font-size: 17px;
+        color: white;
+
+        /* Spacing */
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .submit-btn:hover{
+        /* Decoration */
+        background-color: #003377;
+
+    }
+
+/*Unused CSS*/
+
+    /* Back To Home Button */
+    .back-to-home{
+        /* Width and Height */
+        width: 100px;
+        height: 40px;
+        
+        /* Positioning */
+        position: absolute;
+        right: 15px; 
+        bottom: 15px;
+
+        /* Text */
+        color: white;
+        font-size: 20px;
+        text-decoration: none; /* Link Without UnderLine */
+
+        /* Alignment */
+        text-align: center;
+        line-height: 40px; /* Centering Text Vertically */
+        
+        /* Box Model */
+        border-radius: 5px;
+        background-color: #314065;
+    }
+
+    .back-to-home:hover::before{
+        /* Width and Height */
+        width: 200px;
+        height: 40px;
+        
+        /* Positioning */
+        position: absolute;
+        right: 105px; 
+        bottom: 0px;
+
+        /* Text */
+        color: white;
+        font-size: 20px;
+        text-decoration: none; /* Link Without UnderLine */
+
+        /* Alignment */
+        text-align: center;
+        line-height: 40px; /* Centering Text Vertically */
+        
+        /* Box Model */
+        border-radius: 5px;
+        background-color: #666f87;
+
+        /* Content */
+        content: 'Back to Home Page';
+    }
