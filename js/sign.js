@@ -5,7 +5,7 @@ function create_account() {
     var password = $("#sign-password").val();
 
     $.ajax({
-        url: "create.php",
+        url: "./func/create.php",
         data: { 
             nickname: nickname, 
             username: username,

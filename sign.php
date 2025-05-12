@@ -82,15 +82,15 @@
 
                     <!-- start NickName and UserName -->
                     <div class="div">
-                            <div class="div-nickname" style="width: 50%;">
-                                <label class="label "><p class="mb0 bold">NICKNAME</label>
-                                <input class="input-box" id="sign-nickname">
-                            </div>
+                        <div class="div-nickname">
+                            <label class="label"><p class="mb0 bold">NICKNAME</p></label>
+                            <input class="input-box" id="sign-nickname">
+                        </div>
 
-                            <div class="div-username" style="width: 50%;">
-                                <label class="label"><p class="mb0 bold">USERNAME</p></label>
-                                <input class="input-box" id="sign-username">
-                            </div>
+                        <div class="div-username">
+                            <label class="label"><p class="mb0 bold">USERNAME</p></label>
+                            <input class="input-box" id="sign-username">
+                        </div>
                     </div>
                     <!-- end NickName and UserName -->
 
@@ -114,7 +114,7 @@
 
                             <div class="div-username" style="width: 50%;">
                                 <label class="label">&nbsp;</label>
-                                <button class="submit-btn" onclick="create_account()">REGISTER <b>RIGHT NOW</b></button>
+                                <button class="my-btn submit-btn" onclick="create_account()">REGISTER <b>RIGHT NOW</b></button>
                             </div>
                     </div>
                     <!-- end Password and Create Button -->

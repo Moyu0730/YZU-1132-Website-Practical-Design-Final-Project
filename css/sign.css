@@ -5,7 +5,8 @@
             .input-box{
                 /* Width and Height */
                 width: 100%;
-                
+                height: 45px;
+
                 /* Decoration */
                 background-color: #E0E0E0;
 
@@ -58,7 +59,7 @@
             /* NickName */
             .div-nickname{
                 /* Width and Height */
-                width: 20%;
+                width: 50%;
 
                 /* Alignment */
                 display: flex; 
@@ -69,7 +70,7 @@
             /* UserName */
             .div-username{
                 /* Width and Height */
-                width: 20%;
+                width: 50%;
 
                 /* Alignment */
                 display: flex; 
@@ -79,14 +80,7 @@
 
 
     /* Button */
-    .submit-btn{
-        /* Width and Height */
-        width: 100%;
-
-        /* Decoration */
-        border-radius: 5px;
-        background-color: #4576b6;
-
+    .my-btn{
         /* Shadow */
         transition: box-shadow 0.2s, background-color 0.2s, transform 0.2s;
         box-shadow: none;
@@ -105,11 +99,73 @@
         padding-right: 5px;
     }
 
-    .submit-btn:hover{
-        /* Decoration */
-        background-color: #003377;
+        /* Submit Button */
+        .submit-btn{
+            /* Width and Height */
+            width: 100%;
+            height: 45px;
 
-    }
+            /* Decoration */
+            border-radius: 5px;
+            background-color: #4576b6;
+        }
+
+        .submit-btn:hover{
+            /* Decoration */
+            background-color: #003377;
+        }
+
+        /* Continue Button */
+        .conti-btn{
+            /* Width and Height */
+            width: 50%;
+            height: 45px;
+
+            /* Decoration */
+            border-radius: 5px;
+            background-color: #4576b6;
+        }
+
+        .conti-btn:hover{
+            /* Decoration */
+            background-color: #003377;
+        }
+
+        /* Back Button */
+        .back-btn{
+            /* Width and Height */
+            width: 50%;
+            height: 45px;
+
+            /* Decoration */
+            border-radius: 5px;
+            background-color: #FF7575;
+
+        }
+
+        .back-btn:hover{
+            /* Decoration */
+            background-color: #FF2D2D;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*Unused CSS*/
 
