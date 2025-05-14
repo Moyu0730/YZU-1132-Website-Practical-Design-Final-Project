@@ -1,5 +1,17 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## feat: New function generateRandomNumber
+* Affected Files
+    1. Modified : No File Deleted
+    2. Created
+        * `func\random.php`
+    3. Deleted : No File Deleted
+* Features
+    1. `func\random.php`
+        1. `generateRandomNumber()`
+            * To generate a random number within a specified range
+            * Throws excecption if `$min` is greater than `$max`
+
 ## update: Merge Files with Branch Moyu
 
 ## feat: Finish Data Confirmation Page and New Data Validation
