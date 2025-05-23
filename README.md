@@ -1,5 +1,10 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## style: Adjust README.md Format
+
+* Features
+    * Remove the remark of `Email format check`
+
 ## feat: Add Flask Backend and Python Validation
 
 * Affected Files
@@ -18,7 +23,7 @@
     * Updated `sign.html` and `sign.js` to use new backend API for account creation and validation
     * Ensured validation includes
         1. Empty field check
-        2. Email format check (YZU student/staff)
+        2. Email format check
         3. Nickname, username, password length limits
         4. Password must contain special characters
         5. Simple SQL injection prevention
