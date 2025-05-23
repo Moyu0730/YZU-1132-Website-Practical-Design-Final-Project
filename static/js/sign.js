@@ -1,25 +1,22 @@
 function create_account() {
-    var nickname = $("#sign-nickname").val();
-    var username = $("#sign-username").val();
-    var email = $("#sign-email").val();
-    var password = $("#sign-password").val();
+    const data = {
+        nickname: $("#sign-nickname").val(),
+        username: $("#sign-username").val(),
+        email: $("#sign-email").val(),
+        password: $("#sign-password").val()
+    };
 
     $.ajax({
-        url: "./func/create.php",
-        data: { 
-            nickname: nickname, 
-            username: username,
-            email: email,
-            password: password 
-        },
+        url: "/api/create_account",
+        data: JSON.stringify(data),
         type: "POST",
-        datatype: "html",
+        contentType: "application/json",
         success: function( output ) { $( "#create" ).html(output); },
         error: function(){ alert( "Request failed." ); }
     });
 }
 
-function signIn() {
+function logIn() {
     // var account = $("#signin-account").val();
     // var password = $("#signin-password").val();
 
