@@ -1,6 +1,16 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
-## update: Merge Files with Branch Moyu
+## feat: Adjust Folder Structure
+
+* Features
+    * Added `static` and `templates` Folders
+        * In `static` Folder, there has
+            1. `js` Folder
+            2. `func` Folder
+            3. `img` Folder
+            4. `img` Folder
+        * In `templates` Folder, there has
+            1. All .html and .php Files
 
 ## feat: Finish Data Confirmation Page and New Data Validation
 
