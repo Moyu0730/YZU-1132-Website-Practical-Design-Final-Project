@@ -1,5 +1,62 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## style: Adjust README.md Format
+
+* Features
+    * Remove the remark of `Email format check`
+
+## feat: Add Flask Backend and Python Validation
+
+* Affected Files
+    1. Modified
+        * `templates/sign.html` : Updated to use AJAX for account creation.
+        * `static/js/sign.js` : Changed AJAX URL and logic for new backend.
+    2. Created
+        * `app.py` : Flask backend main file.
+        * `static/func/account.py` : Handles account creation and confirmation HTML.
+        * `static/func/data.py` : Handles input validation and SQL injection prevention.
+    3. Deleted : No file deleted
+* Features
+    * Added Flask backend (`app.py`) to handle routing and API endpoints
+    * Added Python validation logic in `static/func/data.py` and account creation logic in `static/func/account.py`
+    * Integrated AJAX-based account creation with `/api/create_account` endpoint
+    * Updated `sign.html` and `sign.js` to use new backend API for account creation and validation
+    * Ensured validation includes
+        1. Empty field check
+        2. Email format check
+        3. Nickname, username, password length limits
+        4. Password must contain special characters
+        5. Simple SQL injection prevention
+* Project Progress Structure
+    ```
+    YZU-1132-Website-Practical-Design-Final-Project/
+    ├── static/
+    │   ├── css/
+    │   │   └── sign.css
+    │   ├── js/
+    │   │   └── sign.js
+    │   ├── func/
+    │   │   ├── account.py
+    │   │   └── data.py
+    │   └── img/
+    ├── templates/
+    │   ├── index.html
+    │   └── sign.html
+    ├── app.py
+    ├── README.md
+    ```
+
+    - `static/css/`: CSS stylesheets
+    - `static/js/`: JavaScript files for frontend logic
+    - `static/func/`: Python modules for backend logic (account creation, validation)
+    - `static/img/`: Image assets
+    - `templates/`: HTML templates for Flask rendering
+    - `app.py`: Main Flask backend file
+    - `README.md`: Project documentation
+
+> [!NOTE]
+> Now using Flask and Python for backend validation and account creation. All validation and confirmation are handled server-side.
+
 ## feat: Adjust Folder Structure
 
 * Features
