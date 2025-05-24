@@ -11,9 +11,9 @@ def validate(nickname, username, email, password):
         if not re.match(r"^(s\d{7}@mail|[A-Za-z0-9]+@saturn)\.yzu\.edu\.tw$", email):
             raise Exception("Invalid Email Format.")
 
-        # Check if nickname longer than 25 characters
-        if len(nickname) > 25:
-            raise Exception("Nickname Must be Less than 25 Characters.")
+        # Check if nickname longer than 1 characters
+        if len(nickname) > 7:
+            raise Exception("Nickname Must be Less than 7 Characters.")
 
         # Check if username longer than 25 characters
         if len(username) > 25:

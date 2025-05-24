@@ -18,7 +18,7 @@ def create_account(data):
                         <p class="mb0 bold">NickName</p>
                     </div>
                     <div class="grid-column align--right align--center-on-tiny" style="width: 60%;">
-                        <p class="mb0" style="font-family: Roboto">{nickname}</p>
+                        <p class="mb0" style="font-family: Roboto" id="check-nickname">{nickname}</p>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@ def create_account(data):
                         <p class="mb0 bold">UserName</p>
                     </div>
                     <div class="grid-column align--right align--center-on-tiny" style="width: 60%;">
-                        <p class="mb0" style="font-family: Roboto">{username}</p>
+                        <p class="mb0" style="font-family: Roboto" id="check-username">{username}</p>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@ def create_account(data):
                         <p class="mb0 bold">Email</p>
                     </div>
                     <div class="grid-column align--right align--center-on-tiny" style="width: 60%;">
-                        <p class="mb0" style="font-family: Roboto">{email}</p>
+                        <p class="mb0" style="font-family: Roboto" id="check-email">{email}</p>
                     </div>
                 </div>
             </div>
@@ -48,13 +48,13 @@ def create_account(data):
                         <p class="mb0 bold">Password</p>
                     </div>
                     <div class="grid-column align--right align--center-on-tiny" style="width: 60%;">
-                        <p class="mb0" style="font-family: Roboto">{password}</p>
+                        <p class="mb0" style="font-family: Roboto" id="check-password">{password}</p>
                     </div>
                 </div>
             </div>
             <div class="grid-row">
                 <div class="grid-column" style="padding-right: 3px;">
-                    <button class="my-btn conti-btn" style="width: 100%">Continue</button>
+                    <button class="my-btn conti-btn" style="width: 100%" onclick="sql_create_account()">Continue</button>
                 </div>
                 <div class="grid-column" style="padding-left: 3px;">
                     <button class="my-btn back-btn" style="width: 100%" onclick="window.location.href='/sign'">Back</button>
@@ -78,3 +78,9 @@ def create_account(data):
             """
     return html
 # End create
+
+def login_account(data):
+    nickname = data.get('nickname', '')
+    username = data.get('username', '')
+    email = data.get('email', '')
+    password = data.get('password', '')

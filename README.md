@@ -1,5 +1,57 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## feat: Integrate Flask Backend, Python Validation, and PostgreSQL Database
+
+* Affected Files
+    1. Modified
+        * `templates/sign.html` : Updated to use AJAX for account creation and interact with Flask backend
+        * `static/js/sign.js` : Added AJAX requests to Flask API and handled account creation logic
+        * `static/js/index.js` : Dynamically displays login/logout button based on cookie status
+        * `templates/index.html` : Navigation bar supports login/logout state display
+    2. Created
+        * `app.py` : Main Flask backend file, handles routing and API endpoints.
+        * `static/func/account.py` : Handles account creation and validation HTML responses
+        * `static/func/data.py` : Handles input validation and SQL injection prevention
+        * `database/sql.py` : Connects to PostgreSQL and executes account data insertion
+    3. Deleted : No file deleted
+* Features
+    * Switched backend to Flask for unified handling of registration, login, and logout processes
+    * Registration now uses AJAX requests, with real-time feedback on the main page
+    * On successful registration, sets cookie and redirects to homepage; 
+        * homepage and navbar display nickname or login button based on cookie
+    * Added PostgreSQL database integration for account data storage (`database/sql.py`)
+    * Refactored project structure to separate backend logic, static resources, and templates
+* Project Progress Structure
+    ```
+    YZU-1132-Website-Practical-Design-Final-Project/
+    ├── static/
+    │   ├── css/
+    │   │   └── sign.css
+    │   ├── js/
+    │   │   ├── sign.js
+    │   │   └── index.js
+    │   ├── func/
+    │   │   ├── account.py
+    │   │   └── data.py
+    │   └── img/
+    ├── templates/
+    │   ├── index.html
+    │   └── sign.html
+    ├── database/
+    │   └── sql.py
+    ├── app.py
+    ├── README.md
+    ```
+
+    - `css`: CSS stylesheets
+    - `js`: JavaScript files for frontend logic
+    - `func`: Python modules for backend logic
+    - `img`: Image assets
+    - `templates`: HTML templates for Flask rendering
+    - `database`: Database connection and SQL logic
+    - `app.py`: Main Flask backend file
+    - `README.md`: Project documentation
+
 ## style: Adjust README.md Format
 
 * Features
