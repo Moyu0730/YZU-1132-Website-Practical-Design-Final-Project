@@ -56,7 +56,9 @@
                             <li class="small mr2"><a class="link link--text" href="./destinations.html">Skills</a></li>
                             <li class="small mr2"><a class="link link--text" href="./pricing.html">Trend</a></li>
                             <li class="small mr2"><a class="link link--text" href="./contact.html">My Profile</a></li>
-                            <li class="small"><a class="link link--text" href="{{ url_for('move_to_sign') }}">Sign In</a></li>
+                            <li class="small" id="index-sign" data-logout-url="{{ url_for('move_to_logout') }}" data-sign-url="{{ url_for('move_to_sign') }}">
+                                <a class="link link--text" href="{{ url_for('move_to_sign') }}">Sign In</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -89,4 +91,7 @@
         </div>
     </body>
     <!-- end Body -->
+
+    <!-- JS -->
+    <script src="../static/js/index.js"></script>
 </html>
