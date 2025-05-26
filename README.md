@@ -1,5 +1,62 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## feat: RPG Canvas Character and Grid Adjustment
+
+* Affected Files
+    1. Modified
+        * `static/js/rpg.js` : Adjusted grid calculation and character rendering to fit an 8x8 grid
+        * `templates/index.html` : Ensured canvas is displayed and sized for RPG grid
+        * `static/css/rpg.css` : Canvas background and style adjustments
+    2. Created : None
+    3. Deleted : None
+* Features
+    * The RPG canvas is now divided into an 8x8 grid, regardless of the canvas pixel width
+    * The main character's size is dynamically set to exactly match one grid cell
+    * All map objects (mountain, enemy, coin, etc.) are rendered to fit one grid cell
+    * Canvas and grid size calculations are now consistent and responsive to the canvas width
+    * Improved code clarity for grid and character rendering
+* Project Progress Structure
+    ```
+    YZU-1132-Website-Practical-Design-Final-Project/
+    ├── static/
+    │   ├── css/
+    │   │   ├── production.css
+    │   │   ├── rpg.css
+    │   │   └── sign.css
+    │   ├── js/
+    │   │   ├── index.js
+    │   │   ├── rpg.js
+    │   │   └── sign.js
+    │   ├── func/
+    │   │   ├── account.py
+    │   │   └── data.py
+    │   └── img/
+    │       ├── Enemy.png
+    │       ├── grasses68.gif
+    │       ├── material.png
+    │       └── spriteSheet.png
+    ├── templates/
+    │   ├── index.html
+    │   └── sign.html
+    ├── database/
+    │   └── sql.py
+    ├── app.py
+    ├── config.ini
+    ├── README.md
+    └── .gitignore
+    ```
+
+    - `css`: CSS stylesheets (production, RPG, sign)
+    - `js`: JavaScript files for frontend logic (index, RPG, sign)
+    - `func`: Python modules for backend logic (account creation, validation)
+    - `img`: Image assets for RPG and UI
+    - `templates`: HTML templates for Flask rendering
+    - `database`: Database connection and SQL logic
+    - `app.py`: Main Flask backend file
+    - `config.ini`: Database and environment configuration
+    - `README.md`: Project documentation
+    - `.gitignore`: Git ignore rules
+
 ## feat: Integrate Flask Backend, Python Validation, and PostgreSQL Database
 
 * Affected Files

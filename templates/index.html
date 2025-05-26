@@ -12,6 +12,7 @@
 
         <!-- The compiled CSS file -->
         <link rel="stylesheet" href="../static/css/production.css">
+        <link rel="stylesheet" href="../static/css/rpg.css">
 
         <!-- Web fonts -->
         <link href="https://fonts.googleapis.com/css?family=Cabin:400,700|Playfair+Display:900" rel="stylesheet">
@@ -40,16 +41,12 @@
             <!-- end Header -->
             
             <!-- start Canvas -->
-            <!-- <div class="hero-container full-width show-on-mobile pt1 pl2 pr2">
-                <div class="hero full-width full-height" style="background:rgba(0,0,0,0) url(../static/img/1.jpg) no-repeat scroll center center/cover"></div>
-            </div> -->
-            <div class="hide-on-mobile hero" style="background:rgba(0,0,0,0) url(../static/img/1.jpg) no-repeat scroll center center/cover"></div>
+            <canvas style="position: fixed; top: 0; left: 3.5rem; bottom: 0; width: calc(100% - 610px - 3.5rem); height: 100%;" id="canvas-rpg"></canvas>
             <!-- end Canvas -->
 
             <!-- Body -->
             <div class="body full-width">
                 <div class="full-width full-height pb1 pl2 pr2 pt1">
-                    <!-- Navigation -->
                     <nav class="navigation border--bottom pt1">
                         <ul class="no-bullets list--inline pb1 bold">
                             <li class="small mr2"><a class="link link--text current" href="./">Character</a></li>
@@ -89,9 +86,11 @@
                 </footer> -->
             </div>
         </div>
+        <!-- end Body -->
     </body>
-    <!-- end Body -->
 
     <!-- JS -->
+    <script src="https://unpkg.com/jquery"></script>
     <script src="../static/js/index.js"></script>
+    <script src="../static/js/rpg.js"></script>
 </html>
