@@ -1,0 +1,35 @@
+    /* Button */
+    .my-btn{
+        /* Shadow */
+        transition: box-shadow 0.2s, background-color 0.2s, transform 0.2s;
+        box-shadow: none;
+
+        /* Border */
+        border: none;
+        outline: none;
+        border-radius: 4px;
+
+        /* Text */
+        font-size: 17px;
+        color: white;
+
+        /* Spacing */
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+        /* Continue Button */
+        .redirect-btn{
+            /* Width and Height */
+            width: 50%;
+            height: 45px;
+
+            /* Decoration */
+            border-radius: 5px;
+            background-color: #4576b6;
+        }
+
+        .redirect-btn:hover{
+            /* Decoration */
+            background-color: #003377;
+        }
