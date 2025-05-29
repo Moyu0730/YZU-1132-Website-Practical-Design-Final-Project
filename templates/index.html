@@ -10,9 +10,13 @@
         <title>Viking Tours</title>
         <meta name="description" content="">
 
-        <!-- The compiled CSS file -->
+        <!-- CSS -->
         <link rel="stylesheet" href="../static/css/production.css">
         <link rel="stylesheet" href="../static/css/rpg.css">
+        <link rel="stylesheet" href="../static/css/profile.css">
+
+        <!-- JS -->
+        <script src="../static/js/profile.js"></script>
 
         <!-- Web fonts -->
         <link href="https://fonts.googleapis.com/css?family=Cabin:400,700|Playfair+Display:900" rel="stylesheet">
@@ -47,17 +51,28 @@
             <!-- Body -->
             <div class="body full-width">
                 <div class="full-width full-height pb1 pl2 pr2 pt1">
-                    <nav class="navigation border--bottom pt1">
+
+
+                    <!-- start Navigation -->
+                    <nav class="navigation border--bottom pt1" style="text-align: center;">
                         <ul class="no-bullets list--inline pb1 bold">
                             <li class="small mr2"><a class="link link--text current" href="./">Character</a></li>
-                            <li class="small mr2"><a class="link link--text" href="./destinations.html">Skills</a></li>
+                            <!-- <li class="small mr2"><a class="link link--text" href="./destinations.html">Skills</a></li> -->
                             <li class="small mr2"><a class="link link--text" href="./pricing.html">Trend</a></li>
-                            <li class="small mr2"><a class="link link--text" href="./contact.html">My Profile</a></li>
+                            <li class="small mr2"><a class="link link--text" onclick="ajax_open_profile()">My Profile</a></li>
                             <li class="small" id="index-sign" data-logout-url="{{ url_for('move_to_logout') }}" data-sign-url="{{ url_for('move_to_sign') }}">
                                 <a class="link link--text" href="{{ url_for('move_to_sign') }}">Sign In</a>
                             </li>
                         </ul>
                     </nav>
+                    <!-- end Navigation -->
+
+
+                    <!-- start main-blank -->
+                    <main class="content pt2 pb2" id="main-blank">
+                        <h2 style="text-align: center;">Welcome</h2>
+                    </main>
+                    <!-- end Main-blank -->
                 </div>
 
                 <!-- Navigation -->
@@ -93,4 +108,5 @@
     <script src="https://unpkg.com/jquery"></script>
     <script src="../static/js/index.js"></script>
     <script src="../static/js/rpg.js"></script>
+    <script src="../static/js/profile.js"></script>
 </html>

@@ -1,12 +1,23 @@
 from flask import Flask, redirect, render_template, request, make_response
 from static.func.account import create_account, login_account
 from database.sql import sql_create_user
+from static.func.profile import open_profile
 
 app = Flask(__name__)
 
 @app.route('/')
 def move_to_index():
     return render_template("index.html")
+
+
+# Start Profile
+@app.route('/profile', methods=['POST'])
+def open_my_profile():
+    data = request.get_json()
+    result = open_profile(data)
+    return result
+# End Profile
+
 
 # Start Sign and Log API
 @app.route('/sign')

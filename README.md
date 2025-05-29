@@ -1,5 +1,50 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## feat: Complete Profile AJAX Functionality on Index Page
+
+* Affected Files
+    1. Modified
+        * `templates/index.html` : Added AJAX call for profile display and updated navigation bar to trigger profile modal
+    2. Created
+        * `static/js/profile.js` : Implemented AJAX logic to fetch and render user profile dynamically
+        * `static/css/profile.css` : Styles for profile modal and buttons
+        * `static/func/profile.py` : Backend logic to return profile HTML based on login state
+    3. Deleted : None
+* Features
+    * Clicking "My Profile" in the navigation bar now triggers an AJAX request to fetch and display the user's profile without reloading the page
+    * Profile content is dynamically rendered based on the user's login state (shows welcome and logout if logged in, sign in prompt if not)
+    * Improved user experience by avoiding full page reloads for profile access
+    * Backend (`profile.py`) returns appropriate HTML for profile modal based on session/cookie
+* Project Progress Structure
+    ```
+    YZU-1132-Website-Practical-Design-Final-Project/
+    ├── static/
+    │   ├── css/
+    │   │   ├── production.css
+    │   │   ├── rpg.css
+    │   │   ├── sign.css
+    │   │   └── profile.css (Created)
+    │   ├── js/
+    │   │   ├── index.js
+    │   │   ├── rpg.js
+    │   │   ├── sign.js
+    │   │   └── profile.js (Created)
+    │   ├── func/
+    │   │   ├── account.py
+    │   │   ├── data.py
+    │   │   └── profile.py (Created)
+    │   └── img/
+    ├── templates/
+    │   ├── index.html
+    │   └── sign.html
+    ├── database/
+    │   └── sql.py
+    ├── app.py
+    ├── config.ini
+    ├── README.md
+    └── .gitignore
+    ```
+
 ## feat: RPG Canvas Character and Grid Adjustment
 
 * Affected Files
