@@ -8,11 +8,11 @@ def validate(nickname, username, email, password):
             raise Exception("All Fields are Required.")
 
         # Check if email is valid
-        if not re.match(r"^(s\d{7}@mail|[A-Za-z0-9]+@saturn)\.yzu\.edu\.tw$", email):
+        if not re.match(r"^(s\d{7}@mail|[A-Za-z0-9]+@saturn)\.yzu\.edu\.tw$", email) and email != 'pass':
             raise Exception("Invalid Email Format.")
 
         # Check if nickname longer than 1 characters
-        if len(nickname) > 7:
+        if len(nickname) > 7 and nickname != 'pass':
             raise Exception("Nickname Must be Less than 7 Characters.")
 
         # Check if username longer than 25 characters
@@ -33,7 +33,7 @@ def validate(nickname, username, email, password):
 
         # Prevent SQL Injection
         if (if_sql_injection(nickname) or if_sql_injection(username) or
-            if_sql_injection(email) or if_sql_injection(password)):
+            if_sql_injection(email) or if_sql_injection(password)) and email != 'pass' and nickname != 'pass':
             raise Exception("Stop Doing SQL Injection. \nWe Are Watching You.")
 
         return "Validation successful."

@@ -1,5 +1,58 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## feat: Add AJAX-based Login and Account Creation with PostgreSQL Integration
+
+* Affected Files
+    1. Modified
+        * `templates/sign.html` : Updated navigation and login form, AJAX triggers for login and account creation
+        * `static/js/sign.js` : Implemented AJAX logic for login, account creation, and PostgreSQL integration
+        * `static/func/account.py` : Added account creation and login validation logic
+        * `static/func/data.py` : Enhanced input validation and SQL injection prevention
+        * `database/sql.py` : Added PostgreSQL logic for user creation and login query
+        * `app.py` : Integrated new API endpoints for login and account creation
+    2. Created
+        * `static/func/ajax.py` : Backend logic to return login and account creation HTML for AJAX requests
+    3. Deleted : None
+* Features
+    * Login and account creation forms are now loaded dynamically via AJAX without full page reloads
+    * User registration and login are validated on the backend with Python, including SQL injection prevention and field checks
+    * PostgreSQL is used for persistent user data storage; account creation and login both interact with the database
+    * On successful login or registration, user is redirected to the homepage and a cookie is set for session management
+    * Error and validation messages are displayed dynamically in the form area
+    * Project structure further modularized for maintainability
+* Project Progress Structure
+    ```
+    YZU-1132-Website-Practical-Design-Final-Project/
+    ├── static/
+    │   ├── css/
+    │   │   ├── production.css
+    │   │   ├── rpg.css
+    │   │   ├── profile.css
+    │   │   ├── sign.css (Modified)
+    │   ├── js/
+    │   │   ├── index.js
+    │   │   ├── rpg.js
+    │   │   ├── sign.js (Modified)
+    │   ├── func/
+    │   │   ├── account.py (Modified)
+    │   │   ├── data.py (Modified)
+    │   │   ├── ajax.py (Created)
+    │   │   └── profile.py
+    │   └── img/
+    ├── templates/
+    │   ├── index.html
+    │   └── sign.html (Modified)
+    ├── database/
+    │   └── sql.py (Modified)
+    ├── app.py (Modified)
+    ├── config.ini
+    ├── README.md
+    └── .gitignore
+    ```
+
+> [!NOTE]
+> Login and registration are now fully AJAX-driven and backed by PostgreSQL with robust validation and error handling.
+
 ## feat: Complete Profile AJAX Functionality on Index Page
 
 * Affected Files

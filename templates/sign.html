@@ -59,13 +59,17 @@
                 <nav class="navigation border--bottom pt1">
                     <ul class="no-bullets list--inline pb1 bold" style="text-align: center;">
                         <!-- start Sign In Button -->
-                        <li class="small mr2"><a class="link link--text current" href="./sign.php">Create Account</a></li>
+                        <li class="small mr2">
+                            <a class="link link--text">
+                                <button style="all: unset;" onclick="ajax_login()">Log In</button>
+                            </a>
+                        </li>
                         <!-- end Sign In Button -->
 
                         <!-- start Sign In Button -->
                         <li class="small mr2">
                             <a class="link link--text">
-                                <button style="all: unset;" onclick="logIn()">Log In</button>
+                                <button style="all: unset;" onclick="ajax_create()">Create Account</button>
                             </a>
                         </li>
                         <!-- end Sign In Button -->
@@ -75,46 +79,33 @@
                 </nav>
 
                 <main class="content pt2 pb2" id="main-blank">
-                    <h2>Welcome</h2>
+                    <h2>Welcome Back</h2>
 
-                    <!-- start NickName and UserName -->
-                    <div class="div">
-                        <div class="div-nickname">
-                            <label class="label"><p class="mb0 bold">NICKNAME</p></label>
-                            <input class="input-box" id="sign-nickname">
-                        </div>
-
-                        <div class="div-username">
+                    <!-- start UserName -->
+                    <div class="div" style="width: 100%;">
+                        <div class="div-left" style="width: 100%; align-items: flex-start;">
                             <label class="label"><p class="mb0 bold">USERNAME</p></label>
-                            <input class="input-box" id="sign-username">
+                            <input class="input-box" id="login-username">
                         </div>
                     </div>
-                    <!-- end NickName and UserName -->
+                    <!-- end UserName -->
 
-
-                    <!-- start Email -->
-                    <div class="div">
-                            <div class="div-nickname" style="width: 100%;">
-                                <label class="label"><p class="mb0 bold">EMAIL</p></label>
-                                <input type="email" class="input-box" id="sign-email">
-                            </div>
+                    <!-- start Password -->
+                    <div class="div" style="width: 100%;">
+                        <div class="div-left" style="width: 100%; align-items: flex-start;">
+                            <label class="label"><p class="mb0 bold">PASSWORD</p></label>
+                            <input class="input-box" id="login-password" type="password">
+                        </div>
                     </div>
-                    <!-- end Email -->
+                    <!-- end Password -->
                     
+                    </br>
 
-                    <!-- start Password and Create Button -->
-                    <div class="div">
-                            <div class="div-nickname" style="width: 50%;">
-                                <label class="label"><p class="mb0 bold">PASSWORD</p></label>
-                                <input class="input-box" id="sign-password" type="password">
-                            </div>
-
-                            <div class="div-username" style="width: 50%;">
-                                <label class="label">&nbsp;</label>
-                                <button class="my-btn submit-btn" onclick="create_account()">REGISTER <b>RIGHT NOW</b></button>
-                            </div>
+                    <!-- start Login Button -->
+                    <div style="height: 50px; text-align: right;">
+                        <button class="my-btn blue-btn" onclick="sql_login_account()">LOGIN <b>NOW</b></button>
                     </div>
-                    <!-- end Password and Create Button -->
+                    <!-- end Login Button -->
                 </main>
             </div>
         </div>
