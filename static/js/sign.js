@@ -1,3 +1,39 @@
+function ajax_create(){
+    $.ajax({
+        url: "/sign/create",
+        type: "GET",
+        contentType: "application/json",
+        success: function( output ) { $( "#main-blank" ).html(output); },
+        error: function(){ alert( "ajax_create() Request failed." ); }
+    });
+}
+
+function ajax_login() {
+    $.ajax({
+        url: "/sign/login",
+        type: "GET",
+        contentType: "application/json",
+        success: function( output ) { $( "#main-blank" ).html(output); },
+        error: function(){ alert( "ajax_login() Request failed." ); }
+    });
+}
+
+function login_account(){
+    const data = {
+        username: $("#login-username").val(),
+        password: $("#login-password").val()
+    };
+
+    $.ajax({
+        url: "/api/login_account",
+        data: JSON.stringify(data),
+        type: "POST",
+        contentType: "application/json",
+        success: function( output ) { $( "#main-blank" ).html(output); },
+        error: function(){ alert( "login() Request failed." ); }
+    });
+}
+
 function create_account() {
     const data = {
         nickname: $("#sign-nickname").val(),
@@ -16,6 +52,22 @@ function create_account() {
     });
 }
 
+function sql_login_account(){
+    const data = {
+        username: $("#login-username").val(),
+        password: $("#login-password").val()
+    };
+
+    $.ajax({
+        url: "/api/sql_login_account",
+        data: JSON.stringify(data),
+        type: "POST",
+        contentType: "application/json",
+        success: function( return_data ) { login_account_reflect(return_data); },
+        error: function(){ alert( "sql_login_account() Request failed." ); }
+    });
+}
+
 function sql_create_account(){
     const data = {
         nickname: document.getElementById("check-nickname").innerText,
@@ -30,24 +82,48 @@ function sql_create_account(){
         type: "POST",
         contentType: "application/json",
         success: function( return_data ) { create_account_reflect(return_data); },
-        error: function(){ alert( "Request failed." ); }
+        error: function(){ alert( "sql_create_account() Request failed." ); }
     });
 }
 
-function logIn() {
-    const data = {
-        username: $("#sign-username").val(),
-        password: $("#sign-password").val()
-    };
+function login_account_reflect(return_data) {
+    return_data = JSON.parse(return_data);
 
-    $.ajax({
-        url: "/api/ogin",
-        data: JSON.stringify(data),
-        type: "POST",
-        contentType: "application/json",
-        success: function( output ) { $( "#main-blank" ).html(output); },
-        error: function(){ alert( "Request failed." ); }
-    });
+    if (return_data.status == "success" ){
+        $("#main-blank").html(  
+            `
+                <div>
+                    <h2 style="text-align: center;">Welcome, ${return_data.nickname}</h2>
+                    <div class="border--full rounded pt1 pb1 pr2 pl2 mb1">
+                        <p class="mb0" style="font-family: Roboto; text-align: center">
+                            We will now redirect you to home page!
+                        </p>
+                    </div>
+                </div>
+            `);
+        setCookie(return_data.nickname);
+        setTimeout(function() {
+            window.location.href = "/";
+        }, 4500);
+    } else if( return_data.status == "validate_error" ) {
+        $("#main-blank").html(  
+            `
+                ${return_data.message}
+            `);
+    } else {
+        $("#main-blank").html(  
+            `
+                <div>
+                    <h2 style="text-align: center;">An Error Occurred!</h2>
+                    <div class="border--full rounded pt1 pb1 pr2 pl2 mb1">
+                        <p class="mb0" style="font-family: Roboto; text-align: center">${return_data.message}</p>
+                    </div>
+                </div>
+            `);
+        setTimeout(function() {
+            ajax_create();
+        }, 3000);
+    }
 }
 
 function create_account_reflect(return_data) {
@@ -65,7 +141,7 @@ function create_account_reflect(return_data) {
                     </div>
                 </div>
             `);
-        sign_setCookie(return_data.nickname);
+        setCookie(return_data.nickname);
         setTimeout(function() {
             window.location.href = "/";
         }, 4500);
@@ -85,7 +161,7 @@ function create_account_reflect(return_data) {
     }
 }
 
-function sign_setCookie(nickname){
+function setCookie(nickname){
     const FIVE_DAYS = 60 * 60 * 24 * 5; // seconds in five days
     const expires = new Date(Date.now() + FIVE_DAYS * 1000).toUTCString();
     document.cookie = `nickname=${encodeURIComponent(nickname)}; expires=${expires}; path=/`;

@@ -54,10 +54,10 @@ def create_account(data):
             </div>
             <div class="grid-row">
                 <div class="grid-column" style="padding-right: 3px;">
-                    <button class="my-btn conti-btn" style="width: 100%" onclick="sql_create_account()">Continue</button>
+                    <button class="my-btn blue-btn" style="width: 100%" onclick="sql_create_account()">Continue</button>
                 </div>
                 <div class="grid-column" style="padding-left: 3px;">
-                    <button class="my-btn back-btn" style="width: 100%" onclick="window.location.href='/sign'">Back</button>
+                    <button class="my-btn red-btn" style="width: 100%" onclick="ajax_create()">Back</button>
                 </div>
             </div>
             """
@@ -73,14 +73,34 @@ def create_account(data):
                 </div>
             </div>
             <div style="height: 50px; text-align: right;">
-                <button class="my-btn back-btn" onclick="window.location.href='/sign'">Back</button>
+                <button class="my-btn red-btn" onclick="ajax_create()">Back</button>
             </div>
             """
     return html
 # End create
 
-def login_account(data):
-    nickname = data.get('nickname', '')
-    username = data.get('username', '')
-    email = data.get('email', '')
-    password = data.get('password', '')
+
+# Start login
+def check_login_data(username, password):
+    result = validate('pass', username, 'pass', password)
+
+    match result:
+        case "Validation successful.":
+            return 'Validation successful.'
+        case _:
+            safe_result = str(result).replace('<', '&lt;').replace('>', '&gt;')
+            html = f"""
+            <h2 style="text-align: center;">Invalid Input</h2>
+            <div class="border--full rounded pt1 pb1 pr2 pl2 mb1">
+                <div class="grid-row">
+                    <div class="grid-column align--center-on-tiny">
+                        <p class="mb0 bold" style="text-align: center">{safe_result}</p>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 50px; text-align: right;">
+                <button class="my-btn red-btn" onclick="ajax_login()">Back</button>
+            </div>
+            """
+    return html
+# Start login

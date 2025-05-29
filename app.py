@@ -1,7 +1,8 @@
 from flask import Flask, redirect, render_template, request, make_response
-from static.func.account import create_account, login_account
-from database.sql import sql_create_user
+from static.func.account import create_account
+from database.sql import sql_create_user, sql_query_user
 from static.func.profile import open_profile
+from static.func.ajax import ajax_login, ajax_create
 
 app = Flask(__name__)
 
@@ -24,23 +25,27 @@ def open_my_profile():
 def move_to_sign():
     return render_template("sign.html")
 
-@app.route('/api/create_account', methods=['POST'])
-def create():
-    data = request.get_json()
-    result = create_account(data)
-    return result
-
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    result = login_account(data)
-    return result
-
 @app.route('/logout', methods=['GET', 'POST'])
 def move_to_logout():
     resp = make_response(redirect('/'))
     resp.delete_cookie('nickname', path='/', domain=None)
     return resp
+
+@app.route('/sign/create', methods=['GET'])
+def move_to_create():
+    result = ajax_create()
+    return result
+
+@app.route('/sign/login', methods=['GET'])
+def move_to_login():
+    result = ajax_login()
+    return result
+
+@app.route('/api/create_account', methods=['POST'])
+def create():
+    data = request.get_json()
+    result = create_account(data)
+    return result
 # End Sign and Log API
 
 
@@ -49,6 +54,12 @@ def move_to_logout():
 def sql_insert():
     data = request.get_json()
     result = sql_create_user(data)
+    return result
+
+@app.route('/api/sql_login_account', methods=['POST'])
+def sql_query():
+    data = request.get_json()
+    result = sql_query_user(data)
     return result
 # End SQL API
 
