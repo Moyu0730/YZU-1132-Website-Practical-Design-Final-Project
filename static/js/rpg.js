@@ -54,11 +54,11 @@ function drawMapObjects(){
         for(let y in mapArray[x]){
             if(mapArray[x][y] == 4){
                 loadImages(sources, function(images) {
-                    ctx.drawImage(images.Mountain, 32, 65, 32, 32, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                    ctx.drawImage(images.Tomato, 65, 65, 32, 32, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
                 });
             }else if(mapArray[x][y] == 3){
                 loadImages(sources, function(images) {
-                    ctx.drawImage(images.Mountain, 32, 65, 32, 32, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                    ctx.drawImage(images.Enemy, 0, 25, 120, 180, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
                 });
             }else if(mapArray[x][y] == 5){
                 loadImages(sources, function(images) {
