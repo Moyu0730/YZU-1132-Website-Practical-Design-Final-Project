@@ -3,7 +3,7 @@ from static.func.account import create_account
 from database.sql import sql_create_user, sql_query_user
 from static.func.profile import open_profile
 from static.func.ajax import ajax_login, ajax_create
-
+from llm import get_start_response, get_finish_response, get_npc_response
 app = Flask(__name__)
 
 @app.route('/')
@@ -62,7 +62,32 @@ def sql_query():
     result = sql_query_user(data)
     return result
 # End SQL API
+@app.route("/call_llm1", methods=["POST"])
+def call_llm1():
+    try:
+        response = get_start_response()
+        return response
+    except Exception as e:
+        print("Error:", str(e))
+        return "我現在不想跟你講話，待會再來"
 
+@app.route("/call_llm2", methods=["POST"])
+def call_llm2():
+    try:
+        response = get_finish_response()
+        return response
+    except Exception as e:
+        print("Error:", str(e))
+        return "我現在不想跟你講話，待會再來"
+
+@app.route("/call_llm3", methods=["POST"])
+def call_llm3():
+    try:
+        response = get_npc_response()
+        return response
+    except Exception as e:
+        print("Error:", str(e))
+        return "我現在不想跟你講話，待會再來"
 
 if __name__ == '__main__':
     app.run(debug=True)
