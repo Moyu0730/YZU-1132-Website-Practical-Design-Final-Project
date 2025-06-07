@@ -1,0 +1,21 @@
+.calendar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 1.1em;
+}
+.calendar-col {
+    padding: 0 5px;
+}
+.separator {
+    padding: 0 5px;
+    color: #aaa;
+}
+.event {
+    margin-left: 12px;
+    background: #e3f2fd;
+    border-radius: 3px;
+    padding: 0 4px;
+    font-size: 0.97em;
+    display: inline-block;
+}
