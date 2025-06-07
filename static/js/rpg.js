@@ -3,17 +3,21 @@ const gridFullWidth = $("#canvas-rpg").width();
 const gridFullHeight = $("#canvas-rpg").height();
 const gridWidth = $("#canvas-rpg").width() / 10;
 const gridHeight = $("#canvas-rpg").height() / 10;
+// tasks: change it to current img
 var sources = {
-    Mountain: '../static/img/material.png',
-    Enemy: '../static/img/Enemy.png',
-    Tomato: '../static/img/material.png'
+    Mountain: '../static/img/obstacle.png',     // obstacle
+    Enemy: '../static/img/npc.png',           // npc
+    Tomato: '../static/img/cup.png',       // coin
+    Final: '../static/img/fish.png',        // final stop
 };
 
 var images = {};
+//face: 0 - down, 1 - up, 2 - left, 3 - right
 var playerBlock = {
     x:0,
-    y:0
-};
+    y:0,
+    face:0,
+}; 
 
 function loadImages(sources, callback) {
     var loadedImages = 0;
@@ -45,24 +49,29 @@ function findPlayerStart(map) {
             }
         }
     }
-
+    return { x: -1, y: -1 }; // Return an invalid position if not found
 }
 
 // Load all images first, then draw the map and main character
 function drawMapObjects(){
     for(let x in mapArray){
         for(let y in mapArray[x]){
-            if(mapArray[x][y] == 4){
+            if(mapArray[x][y] == 2){            // final 
                 loadImages(sources, function(images) {
-                    ctx.drawImage(images.Tomato, 65, 65, 32, 32, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                    ctx.drawImage(images.Final, 0, 0, 165, 165 , y * gridWidth, x * gridHeight, gridWidth, gridHeight);
                 });
-            }else if(mapArray[x][y] == 3){
+            }            
+            if(mapArray[x][y] == 3){            // npc
                 loadImages(sources, function(images) {
-                    ctx.drawImage(images.Enemy, 0, 25, 120, 180, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                    ctx.drawImage(images.Enemy, 0, -10, 160, 150, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
                 });
-            }else if(mapArray[x][y] == 5){
+            } else if(mapArray[x][y] == 4){     // coin
                 loadImages(sources, function(images) {
-                    ctx.drawImage(images.Mountain, 32, 65, 32, 32, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                    ctx.drawImage(images.Tomato, 0, -30, 180, 180, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                });
+            } else if(mapArray[x][y] == 5){     // obstacle
+                loadImages(sources, function(images) {
+                    ctx.drawImage(images.Mountain, -10, -10, 165, 140, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
                 });
             }
         }
@@ -85,8 +94,7 @@ function switchToNextMap(){
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     drawMapObjects();
-
-    ctx.drawImage(imgMain, 0, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
+    sleep(300);
 }
 
 // Make sure jQuery is loaded before this script in your HTML file
@@ -106,6 +114,7 @@ $(function(){
     };
 
     playerBlock = findPlayerStart(mapArray);
+    playerBlock.face = 0; // face down
     currentImgMain.x = playerBlock.y * gridWidth;
     currentImgMain.y = playerBlock.x * gridHeight;
 
@@ -113,7 +122,13 @@ $(function(){
         ctx.drawImage(imgMain, 0, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
     };
 
+    // loading calendar.js
+    getScripts(["./static/js/calendar.js"], function() {
+        console.log("Map scripts loaded successfully.");
+    });
     drawMapObjects();
+    init_calendar();
+    add_event("Game Started");
 });
 
 // Click Event
@@ -162,18 +177,32 @@ $(document).on("keydown", function(event){
         targetBlock.x = -1;
         targetBlock.y = -1;
     }
-
     ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
 
     if(targetBlock.x != -1 && targetBlock.y != -1){
+        
         switch(mapArray[targetBlock.x][targetBlock.y]){
             case 0: // available
+                currentImgMain.x = targetBlock.y * gridWidth;
+                currentImgMain.y = targetBlock.x * gridHeight;
+                playerBlock.x = targetBlock.x;
+                playerBlock.y = targetBlock.y;
+                ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
+                break;
             case 1: // start
+                currentImgMain.x = targetBlock.y * gridWidth;
+                currentImgMain.y = targetBlock.x * gridHeight;
+                playerBlock.x = targetBlock.x;
+                playerBlock.y = targetBlock.y;
+                ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
+                break;
             case 4: // coin
                 currentImgMain.x = targetBlock.y * gridWidth;
                 currentImgMain.y = targetBlock.x * gridHeight;
                 playerBlock.x = targetBlock.x;
                 playerBlock.y = targetBlock.y;
+                ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
+                add_event("Coin Collected")
                 break;
             case 2: // Final Stop
                 currentImgMain.x = targetBlock.y * gridWidth;
@@ -181,9 +210,14 @@ $(document).on("keydown", function(event){
                 playerBlock.x = targetBlock.x;
                 playerBlock.y = targetBlock.y;
                 switchToNextMap();
+                add_event("Stop Reached");
+                add_day();
                 break;
             case 3: // npc
+                add_event("NPC Encountered");
+                break;
             case 5: // obstacle
+                // add_event("Obstacle Encountered");
                 break;
         }
     }else{
@@ -191,3 +225,20 @@ $(document).on("keydown", function(event){
 
     ctx.drawImage(imgMain, cutImagePositionX, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
 });
+
+function getScripts(scripts, callback) {
+
+    $.ajaxSetup({
+    cache: true
+    });
+    var progress = 0;
+    scripts.forEach(function(script) { 
+        $.getScript(script, function () {
+            if (++progress == scripts.length) callback();
+        }); 
+    });
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

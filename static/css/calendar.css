@@ -13,9 +13,11 @@
 }
 .event {
     margin-left: 12px;
-    background: #e3f2fd;
+    /* background: #e3f2fd;
+     */
     border-radius: 3px;
     padding: 0 4px;
     font-size: 0.97em;
+    width: 100%;
     display: inline-block;
 }
