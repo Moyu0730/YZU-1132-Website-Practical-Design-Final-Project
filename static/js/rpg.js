@@ -160,10 +160,15 @@ $(document).on("keydown", function(event) {
                 playerBlock.x = targetBlock.x;
                 playerBlock.y = targetBlock.y;
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // 清空畫布
-                drawMapObjects(); // 重新繪製地圖
+                
                 break;
             case 5: // 山
                 appendToTalkBox("前方有山，無法前進！");
+                if (typeof window.updateCoinsChart === "function") {
+                    window.currentCoins = (window.currentCoins || 0) + 1;
+                    window.updateCoinsChart(window.currentCoins);
+                }   
+
                 break;
             case 3: // npc
                 //appendToTalkBox("遇到敵人，準備應戰...");

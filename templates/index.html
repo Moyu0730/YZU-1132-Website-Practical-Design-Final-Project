@@ -23,6 +23,9 @@
         <!-- Web fonts -->
         <link href="https://fonts.googleapis.com/css?family=Cabin:400,700|Playfair+Display:900" rel="stylesheet">
 
+        <!-- Plotly CDN -->
+        <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
         <!-- favicon.ico. Place these in the root directory. -->
         <!-- <link rel="shortcut icon" href="favicon.ico"> -->
     </head>
@@ -60,7 +63,7 @@
                         <ul class="no-bullets list--inline pb1 bold">
                             <li class="small mr2"><a class="link link--text current" href="./">Character</a></li>
                             <!-- <li class="small mr2"><a class="link link--text" href="./destinations.html">Skills</a></li> -->
-                            <li class="small mr2"><a class="link link--text" href="./pricing.html">Trend</a></li>
+                            <li class="small mr2"><a class="link link--text" href="#trend" onclick="showCoinsChart()">Trend</a></li>
                             <li class="small mr2"><a class="link link--text" onclick="ajax_open_profile()">My Profile</a></li>
                             <li class="small" id="index-sign" data-logout-url="{{ url_for('move_to_logout') }}" data-sign-url="{{ url_for('move_to_sign') }}">
                                 <a class="link link--text" href="{{ url_for('move_to_sign') }}">Sign In</a>
@@ -72,9 +75,20 @@
 
                     <!-- start main-blank -->
                     <main class="content pt2 pb2" id="main-blank">
-                        <h2 style="text-align: center;">Welcome</h2>
+                        <h2 id="welcomeTitle" style="text-align: center;">Welcome</h2>
                         <div id="talkBox"></div>
-                        
+                        <div style="display: flex; justify-content: center;">
+                        <div style="width: 40vw; min-width: 300px; margin: 20px;">
+                         <!-- 按鈕容器 -->
+                        <div style="display: flex; justify-content: flex-end;">
+                            <button id="closeChartBtn"onclick="hideCoinsChart()"style="padding: 8px 12px; background: #8B0000; color: white; border: none; border-radius: 4px; cursor: pointer; display: none;">關閉
+                            </button>
+                        </div>
+                        <!-- 圖表 -->
+                        <div id="coinsChart"style="width: 100%; height: 40vh; min-height: 200px; display: none; background: white; border: 1px solid #ccc;"></div>
+                        </div>
+                        </div>
+
                     </main>
                     <!-- end Main-blank -->
                 </div>
@@ -115,4 +129,6 @@
     <script src="../static/js/rpg.js"></script>
     <script src="../static/js/profile.js"></script>
     <script src="../static/js/llm.js"></script>
+    <script src="../static/js/chart.js"></script>
+
 </html>

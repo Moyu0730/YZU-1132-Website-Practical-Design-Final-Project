@@ -89,5 +89,6 @@ def call_llm3():
         print("Error:", str(e))
         return "我現在不想跟你講話，待會再來"
 
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
