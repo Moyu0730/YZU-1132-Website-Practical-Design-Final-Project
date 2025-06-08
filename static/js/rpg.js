@@ -10,7 +10,6 @@ var sources = {
     Tomato: '../static/img/cup.png',       // coin
     Final: '../static/img/fish.png',        // final stop
 };
-
 var images = {};
 //face: 0 - down, 1 - up, 2 - left, 3 - right
 var playerBlock = {
@@ -22,22 +21,16 @@ var playerBlock = {
 function loadImages(sources, callback) {
     var loadedImages = 0;
     var numImages = 0;
-
-    // get num of sources
-    for(var i in sources) numImages++;
-
-    for(var i in sources) {
+    for (var i in sources) numImages++;
+    for (var i in sources) {
         images[i] = new Image();
         images[i].onload = function() {
-            if(++loadedImages >= numImages) {
+            if (++loadedImages >= numImages) {
                 callback(images);
             }
         };
         images[i].src = sources[i];
-    }
-
-    for(var i in sources) {
-        console.log("Loading image: " + i + " from " + sources[i] + " - " + images[i].src);
+        console.log("Loading image: " + i + " from " + sources[i]);
     }
 }
 
@@ -78,47 +71,44 @@ function drawMapObjects(){
     }
 }
 
-function switchToNextMap(){
-    let nextIndex = 0;
-    do{
-        nextIndex = Math.floor(Math.random() * 5);
-    } while(nextIndex == currentMapIndex);
+function switchToNextMap() {
+    let nextIndex;
+    do {
+        nextIndex = Math.floor(Math.random() * mapList.length);
+    } while (nextIndex == currentMapIndex);
     
     currentMapIndex = nextIndex;
     mapArray = mapList[currentMapIndex];
-
     playerBlock = findPlayerStart(mapArray);
     currentImgMain.x = playerBlock.y * gridWidth;
     currentImgMain.y = playerBlock.x * gridHeight;
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
     drawMapObjects();
     sleep(300);
 }
 
-// Make sure jQuery is loaded before this script in your HTML file
-$(function(){
+$(function() {
+    console.log("jQuery loaded:", typeof $ !== "undefined");
+    console.log("talkBox exists:", $("#talkBox").length);
+
     ctx = $("#canvas-rpg")[0].getContext("2d");
     ctx.canvas.width = $("#canvas-rpg").width();
     ctx.canvas.height = $("#canvas-rpg").height();
 
-    currentMapIndex = Math.floor(Math.random()*5);
+    currentMapIndex = Math.floor(Math.random() * mapList.length);
     mapArray = mapList[currentMapIndex];
 
     imgMain = new Image();
-    imgMain.src = "../static/img/spriteSheet.png";    //modify character
-    currentImgMain = {
-        x: 0,
-        y: 0
-    };
+    imgMain.src = "../static/img/spriteSheet.png";
+    currentImgMain = { x: 0, y: 0 };
 
     playerBlock = findPlayerStart(mapArray);
     playerBlock.face = 0; // face down
     currentImgMain.x = playerBlock.y * gridWidth;
     currentImgMain.y = playerBlock.x * gridHeight;
 
-    imgMain.onload = function(){
+    imgMain.onload = function() {
         ctx.drawImage(imgMain, 0, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
     };
 
@@ -131,52 +121,43 @@ $(function(){
     add_event("Game Started");
 });
 
-// Click Event
-$(document).on("keydown", function(event){
-    let targetBlock,cutImagePositionX,nextBlock;
-    targetBlock = {
-        x:-1,
-        y:-1
-    };
-    nextBlock = {
-        x : playerBlock.x,
-        y : playerBlock.y
-    };
-
+// 統一的 keydown 事件處理器
+$(document).on("keydown", function(event) {
     event.preventDefault();
+    console.log("Pressed key:", event.code);
 
-    switch(event.code){
+    let targetBlock = { x: -1, y: -1 };
+    let nextBlock = { x: playerBlock.x, y: playerBlock.y };
+    let cutImagePositionX;
+
+    // 根據按鍵更新 nextBlock
+    switch(event.code) {
         case "ArrowLeft":
-            nextBlock.x = nextBlock.x;
             nextBlock.y--;
             cutImagePositionX = 175;
             break;
         case "ArrowUp":
             nextBlock.x--;
-            nextBlock.y = nextBlock.y;
             cutImagePositionX = 355;
             break;
         case "ArrowRight":
-            nextBlock.x = nextBlock.x;
             nextBlock.y++;
             cutImagePositionX = 540;
             break;
         case "ArrowDown":
             nextBlock.x++;
-            nextBlock.y = nextBlock.y;
             cutImagePositionX = 0;
             break;
         default:
             return;
     }
 
-    if(nextBlock.x < 10 && nextBlock.x >=0 && nextBlock.y < 10 && nextBlock.y >=0){
+    // 檢查目標格子是否在地圖範圍內
+    if (nextBlock.x >= 0 && nextBlock.x < mapArray.length && nextBlock.y >= 0 && nextBlock.y < mapArray[0].length) {
         targetBlock.x = nextBlock.x;
         targetBlock.y = nextBlock.y;
-    }else{
-        targetBlock.x = -1;
-        targetBlock.y = -1;
     }
+
     ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
 
     if(targetBlock.x != -1 && targetBlock.y != -1){
@@ -204,7 +185,9 @@ $(document).on("keydown", function(event){
                 ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
                 add_event("Coin Collected")
                 break;
-            case 2: // Final Stop
+            case 4: // 錢
+                appendToTalkBox("吃到錢!");
+                mapArray[targetBlock.x][targetBlock.y] = 0;
                 currentImgMain.x = targetBlock.y * gridWidth;
                 currentImgMain.y = targetBlock.x * gridHeight;
                 playerBlock.x = targetBlock.x;
@@ -220,7 +203,8 @@ $(document).on("keydown", function(event){
                 // add_event("Obstacle Encountered");
                 break;
         }
-    }else{
+    } else {
+        appendToTalkBox("邊界");
     }
 
     ctx.drawImage(imgMain, cutImagePositionX, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
