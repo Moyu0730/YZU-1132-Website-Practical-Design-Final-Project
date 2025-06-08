@@ -3,9 +3,27 @@ from psycopg2 import OperationalError
 import configparser
 import json
 from static.func.account import check_login_data
+import os
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+
+# For if the config.ini isn't exist
+if(not os.path.exists('config.ini')):
+    config['database'] = {
+        'dbname': 'your_db_name',
+        'user': 'your_db_user',
+        'password': 'your_db_password',
+        'host': 'your_host',
+        'port': 'your_port'
+    }
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+    print(">>> `Config file` not found. Try 2 fill in the file.")
+    exit(1)
+
+else:
+    config.read('config.ini')
+
 DB_CONFIG = {
     'dbname': config.get('database', 'dbname'),
     'user': config.get('database', 'user'),
