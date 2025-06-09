@@ -173,15 +173,15 @@ $(document).on("keydown", function(event) {
                 playerBlock.y = targetBlock.y;
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
                 break;
-            case 3: // NPC
-                $.post('/call_llm3', { context: "npc" })
-                    .done(data => appendToTalkBox(data))
-                    .fail(error => appendToTalkBox("ERROR：" + error.statusText));
-                break;
             case 2: // Final stop
                 ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
                 switchToNextMap();
                 add_day();
+                break;
+            case 3: // NPC
+                $.post('/call_llm3', { context: "npc" })
+                    .done(data => appendToTalkBox(data))
+                    .fail(error => appendToTalkBox("ERROR：" + error.statusText));
                 break;
             case 4: // coin
                 currentImgMain.x = targetBlock.y * gridWidth;
