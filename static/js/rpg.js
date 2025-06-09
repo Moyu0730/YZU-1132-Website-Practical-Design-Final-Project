@@ -3,18 +3,20 @@ const gridFullWidth = $("#canvas-rpg").width();
 const gridFullHeight = $("#canvas-rpg").height();
 const gridWidth = $("#canvas-rpg").width() / 10;
 const gridHeight = $("#canvas-rpg").height() / 10;
+// tasks: change it to current img
 var sources = {
-    Mountain: '../static/img/material.png',
-    Enemy: '../static/img/Enemy.png',
-    Tomato: '../static/img/material.png'
+    Mountain: '../static/img/obstacle.png',     // obstacle
+    Enemy: '../static/img/npc.png',           // npc
+    Tomato: '../static/img/cup.png',       // coin
+    Final: '../static/img/fish.png',        // final stop
 };
 var images = {};
+//face: 0 - down, 1 - up, 2 - left, 3 - right
 var playerBlock = {
-    x: 0,
-    y: 0
-};
-
-
+    x:0,
+    y:0,
+    face:0,
+}; 
 
 function loadImages(sources, callback) {
     var loadedImages = 0;
@@ -40,15 +42,29 @@ function findPlayerStart(map) {
             }
         }
     }
-    return { x: 0, y: 0 };
+    return { x: -1, y: -1 }; // Return an invalid position if not found
 }
 
-function drawMapObjects() {
-    for (let x in mapArray) {
-        for (let y in mapArray[x]) {
-            if (mapArray[x][y] == 4 || mapArray[x][y] == 3 || mapArray[x][y] == 5) {
+// Load all images first, then draw the map and main character
+function drawMapObjects(){
+    for(let x in mapArray){
+        for(let y in mapArray[x]){
+            if(mapArray[x][y] == 2){            // final 
                 loadImages(sources, function(images) {
-                    ctx.drawImage(images.Mountain, 32, 65, 32, 32, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                    ctx.drawImage(images.Final, 0, 0, 165, 165 , y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                });
+            }            
+            if(mapArray[x][y] == 3){            // npc
+                loadImages(sources, function(images) {
+                    ctx.drawImage(images.Enemy, 0, -10, 160, 150, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                });
+            } else if(mapArray[x][y] == 4){     // coin
+                loadImages(sources, function(images) {
+                    ctx.drawImage(images.Tomato, 0, -30, 180, 180, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                });
+            } else if(mapArray[x][y] == 5){     // obstacle
+                loadImages(sources, function(images) {
+                    ctx.drawImage(images.Mountain, -10, -10, 165, 140, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
                 });
             }
         }
@@ -69,8 +85,7 @@ function switchToNextMap() {
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     drawMapObjects();
-    ctx.drawImage(imgMain, 0, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
-    //appendToTalkBox("切換到新地圖!");
+    sleep(300);
 }
 
 $(function() {
@@ -89,6 +104,7 @@ $(function() {
     currentImgMain = { x: 0, y: 0 };
 
     playerBlock = findPlayerStart(mapArray);
+    playerBlock.face = 0; // face down
     currentImgMain.x = playerBlock.y * gridWidth;
     currentImgMain.y = playerBlock.x * gridHeight;
 
@@ -96,10 +112,15 @@ $(function() {
         ctx.drawImage(imgMain, 0, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
     };
 
+    // loading calendar.js
+    getScripts(["./static/js/calendar.js"], function() {
+        console.log("Map scripts loaded successfully.");
+    });
     drawMapObjects();
+    init_calendar();
+    add_event("Game Started");
 });
 
-// 統一的 keydown 事件處理器
 $(document).on("keydown", function(event) {
     event.preventDefault();
     console.log("Pressed key:", event.code);
@@ -108,7 +129,6 @@ $(document).on("keydown", function(event) {
     let nextBlock = { x: playerBlock.x, y: playerBlock.y };
     let cutImagePositionX;
 
-    // 根據按鍵更新 nextBlock
     switch(event.code) {
         case "ArrowLeft":
             nextBlock.y--;
@@ -130,70 +150,73 @@ $(document).on("keydown", function(event) {
             return;
     }
 
-    // 檢查目標格子是否在地圖範圍內
     if (nextBlock.x >= 0 && nextBlock.x < mapArray.length && nextBlock.y >= 0 && nextBlock.y < mapArray[0].length) {
         targetBlock.x = nextBlock.x;
         targetBlock.y = nextBlock.y;
     }
 
-    console.log("targetBlock:", targetBlock);
-    console.log("mapValue:", targetBlock.x !== -1 && targetBlock.y !== -1 ? mapArray[targetBlock.x][targetBlock.y] : "out of bounds");
-
     ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
 
-    if (targetBlock.x !== -1 && targetBlock.y !== -1) {
-        let mapValue = mapArray[targetBlock.x][targetBlock.y];
-        switch(mapValue) {
-            case 0: // 可行走
-            case 1: // 起始點
+    if(targetBlock.x != -1 && targetBlock.y != -1){
+        switch( mapArray[targetBlock.x][targetBlock.y] ){
+            case 0: // available
                 currentImgMain.x = targetBlock.y * gridWidth;
                 currentImgMain.y = targetBlock.x * gridHeight;
                 playerBlock.x = targetBlock.x;
                 playerBlock.y = targetBlock.y;
-                //appendToTalkBox("成功前進!");
+                ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
                 break;
-            case 4: // 錢
-                appendToTalkBox("吃到錢!");
-                mapArray[targetBlock.x][targetBlock.y] = 0;
+            case 1: // start
                 currentImgMain.x = targetBlock.y * gridWidth;
                 currentImgMain.y = targetBlock.x * gridHeight;
                 playerBlock.x = targetBlock.x;
                 playerBlock.y = targetBlock.y;
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // 清空畫布
-                
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
                 break;
-            case 5: // 山
-                appendToTalkBox("前方有山，無法前進！");
-                if (typeof window.updateCoinsChart === "function") {
-                    window.currentCoins = (window.currentCoins || 0) + 1;
-                    window.updateCoinsChart(window.currentCoins);
-                }   
-
-                break;
-            case 3: // npc
-                //appendToTalkBox("遇到敵人，準備應戰...");
-                $.post('/call_llm1', { context: "npc" })
-                    .done(data => appendToTalkBox(data))
-                    .fail(error => appendToTalkBox("錯誤：" + error.statusText));
-                break;
-            case 2: // 終點
-                currentImgMain.x = targetBlock.y * gridWidth;
-                currentImgMain.y = targetBlock.x * gridHeight;
-                playerBlock.x = targetBlock.x;
-                playerBlock.y = targetBlock.y;
-                //appendToTalkBox("抵達終點，稍等片刻...");
-                $.post('/call_llm2', { context: "finish" })
-                    .done(data => appendToTalkBox(data))
-                    .fail(error => appendToTalkBox("錯誤：" + error.statusText));
+            case 2: // Final stop
+                ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
                 switchToNextMap();
+                add_day();
+                break;
+            case 3: // NPC
+                $.post('/call_llm3', { context: "npc" })
+                    .done(data => appendToTalkBox(data))
+                    .fail(error => appendToTalkBox("ERROR：" + error.statusText));
+                break;
+            case 4: // coin
+                currentImgMain.x = targetBlock.y * gridWidth;
+                currentImgMain.y = targetBlock.x * gridHeight;
+                playerBlock.x = targetBlock.x;
+                playerBlock.y = targetBlock.y;
+                ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
+                add_event("Coin Collected")
+                break;
+            case 5: // Mountain
+                appendToTalkBox("Oh no! Mountain!");
                 break;
             default:
-                appendToTalkBox("未知地形！");
-                break;
+                appendToTalkBox("Unknown!");
         }
     } else {
-        appendToTalkBox("邊界");
+        appendToTalkBox("Boundary!");
     }
 
     ctx.drawImage(imgMain, cutImagePositionX, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
 });
+
+function getScripts(scripts, callback) {
+
+    $.ajaxSetup({
+    cache: true
+    });
+    var progress = 0;
+    scripts.forEach(function(script) { 
+        $.getScript(script, function () {
+            if (++progress == scripts.length) callback();
+        }); 
+    });
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
