@@ -121,7 +121,6 @@ $(function() {
     add_event("Game Started");
 });
 
-// 統一的 keydown 事件處理器
 $(document).on("keydown", function(event) {
     event.preventDefault();
     console.log("Pressed key:", event.code);
@@ -130,7 +129,6 @@ $(document).on("keydown", function(event) {
     let nextBlock = { x: playerBlock.x, y: playerBlock.y };
     let cutImagePositionX;
 
-    // 根據按鍵更新 nextBlock
     switch(event.code) {
         case "ArrowLeft":
             nextBlock.y--;
@@ -152,7 +150,6 @@ $(document).on("keydown", function(event) {
             return;
     }
 
-    // 檢查目標格子是否在地圖範圍內
     if (nextBlock.x >= 0 && nextBlock.x < mapArray.length && nextBlock.y >= 0 && nextBlock.y < mapArray[0].length) {
         targetBlock.x = nextBlock.x;
         targetBlock.y = nextBlock.y;
@@ -161,8 +158,7 @@ $(document).on("keydown", function(event) {
     ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
 
     if(targetBlock.x != -1 && targetBlock.y != -1){
-        
-        switch(mapArray[targetBlock.x][targetBlock.y]){
+        switch( mapArray[targetBlock.x][targetBlock.y] ){
             case 0: // available
                 currentImgMain.x = targetBlock.y * gridWidth;
                 currentImgMain.y = targetBlock.x * gridHeight;
@@ -175,7 +171,17 @@ $(document).on("keydown", function(event) {
                 currentImgMain.y = targetBlock.x * gridHeight;
                 playerBlock.x = targetBlock.x;
                 playerBlock.y = targetBlock.y;
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                break;
+            case 3: // NPC
+                $.post('/call_llm3', { context: "npc" })
+                    .done(data => appendToTalkBox(data))
+                    .fail(error => appendToTalkBox("ERROR：" + error.statusText));
+                break;
+            case 2: // Final stop
                 ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
+                switchToNextMap();
+                add_day();
                 break;
             case 4: // coin
                 currentImgMain.x = targetBlock.y * gridWidth;
@@ -185,26 +191,14 @@ $(document).on("keydown", function(event) {
                 ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
                 add_event("Coin Collected")
                 break;
-            case 4: // 錢
-                appendToTalkBox("吃到錢!");
-                mapArray[targetBlock.x][targetBlock.y] = 0;
-                currentImgMain.x = targetBlock.y * gridWidth;
-                currentImgMain.y = targetBlock.x * gridHeight;
-                playerBlock.x = targetBlock.x;
-                playerBlock.y = targetBlock.y;
-                switchToNextMap();
-                add_event("Stop Reached");
-                add_day();
+            case 5: // Mountain
+                appendToTalkBox("Oh no! Mountain!");
                 break;
-            case 3: // npc
-                add_event("NPC Encountered");
-                break;
-            case 5: // obstacle
-                // add_event("Obstacle Encountered");
-                break;
+            default:
+                appendToTalkBox("Unknown!");
         }
     } else {
-        appendToTalkBox("邊界");
+        appendToTalkBox("Boundary!");
     }
 
     ctx.drawImage(imgMain, cutImagePositionX, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
