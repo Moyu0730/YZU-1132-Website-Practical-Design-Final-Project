@@ -6,12 +6,11 @@ function showCoinsChart() {
     console.log("開始畫儀錶盤");
 
     document.getElementById("talkBox").style.display = "none";
-    document.getElementById("welcomeTitle").style.display = "none";
 
     const chartDiv = document.getElementById("coinsChart");
     const closeBtn = document.getElementById("closeChartBtn");
     if (!chartDiv || !closeBtn) {
-        console.error("找不到 coinsChart 或 closeChartBtn！");
+        console.error("Could not find coinsChart or closeChartBtn!");
         return;
     }
     chartDiv.style.display = "block";

@@ -1,5 +1,54 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## feat: Add RPG Game Logic, Map Switching, and Optimize Code Structure
+
+* Affected Files  
+    1. Modified  
+        * `static/js/rpg.js` : Refactored to fetch map data via API instead of importing from a JS file  
+        * `app.py` : Added `/api/rpg/get_map` endpoint to serve map data securely from the backend  
+        * `templates/index.html` : Ensured frontend loads RPG as before, but now fetches map data via API  
+    2. Created
+        * `material/map.json` : New location for all RPG map data (moved from `static/js/rpg-map.js`)  
+    3. Deleted  
+        * `static/js/rpg-map.js` : Removed, as map data is now securely stored in the backend
+        * `static/js/randopm.js` : Generate random value within lower and upper bound
+* Features  
+    1. Map data is no longer exposed in the frontend JS, preventing users from easily accessing or modifying map layouts  
+    2. RPG map data is now stored in `material/map.json` and served via a Flask API endpoint
+    3. **Code Structure Optimization** : Frontend RPG logic now fetches map data asynchronously, improving maintainability and separation of concerns  
+    4. **No Breaking Changes** : RPG game logic and user experience remain unchanged, but map data is now protected and easier to manage  
+* Project Progress Structure  
+    ```
+    YZU-1132-Website-Practical-Design-Final-Project/
+    ├── static/
+    │   ├── css/
+    │   │   ├── production.css
+    │   │   ├── rpg.css
+    │   │   ├── profile.css
+    │   │   └── calendar.css
+    │   ├── js/
+    │   │   ├── index.js
+    │   │   ├── rpg.js (Modified)
+    │   │   ├── chart.js (Modified)
+    │   │   ├── calendar.js (Modified)
+    │   │   └── profile.js
+    │   ├── func/
+    │   │   ├── account.py
+    │   │   └── profile.py
+    │   └── img/
+    ├── material/
+    │   └── map.json (Created)
+    ├── templates/
+    │   ├── index.html (Modified)
+    │   └── sign.html
+    ├── database/
+    │   └── sql.py
+    ├── app.py (Modified)
+    ├── config.ini
+    ├── README.md
+    └── .gitignore
+    ```
+
 ## feat: Add AJAX-based Login and Account Creation with PostgreSQL Integration
 
 * Affected Files

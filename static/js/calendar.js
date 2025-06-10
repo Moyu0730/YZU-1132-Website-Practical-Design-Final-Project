@@ -1,4 +1,6 @@
 function getTimeStamp() {
+    console.log("getTimeStamp() Called");
+    
     let date = new Date();
     let hours = String(date.getHours()).padStart(2, '0');
     let minutes = String(date.getMinutes()).padStart(2, '0');
@@ -7,6 +9,8 @@ function getTimeStamp() {
 }
 
 function getDay(){
+    console.log("getDay() Called");
+
     let current_date = document.getElementById("calendar-date");
     let parts = current_date.textContent.split(" ");
     day_count = parseInt(parts[parts.length - 1]);
@@ -14,6 +18,8 @@ function getDay(){
 }
 
 function setDay(){
+    console.log("setDay() Called");
+
     let current_date = document.getElementById("calendar-date");
     if (!current_date) {
         console.error("Calendar date element not found.");
@@ -26,6 +32,7 @@ function setDay(){
 }
 
 function init_calendar(){
+    console.log("init_calendar() Called");
 
     let calendar_canvas = document.getElementById("calendar-canvas");
     if (!calendar_canvas) {
@@ -38,6 +45,7 @@ function init_calendar(){
 }
 
 function add_day(){
+    console.log("add_day() Called");
 
     let calendar_canvas = document.getElementById("calendar-canvas");
     if (!calendar_canvas) {
@@ -60,6 +68,8 @@ function add_day(){
 }
 
 function add_event(event_text){
+    console.log("add_event() Called");
+
     let time = new Date();
     day_id= day_count > 0 ? "day-" + day_count : "day-1";
     let day = document.getElementById(day_id);

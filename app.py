@@ -1,4 +1,6 @@
-from flask import Flask, redirect, render_template, request, make_response
+import json
+
+from flask import Flask, redirect, render_template, request, make_response, jsonify
 from static.func.account import create_account
 from database.sql import sql_create_user, sql_query_user
 from static.func.profile import open_profile
@@ -64,8 +66,23 @@ def sql_query():
     return result
 # End SQL API
 
-# Start LLM API
+# Start RPG and RPG API
+@app.route('/api/rpg/get_map', methods=['GET'])
+def get_map_data():
+    try:
+        with open('material/map.json', 'r', encoding='utf-8') as map_json_file:
+            mapList = json.load(map_json_file)
+        return jsonify(mapList)
+    except FileNotFoundError:
+        return jsonify({'error': 'Map file not found'}), 404
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Invalid JSON format'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+# End RPG aand RPG API
 
+
+# Start LLM API
 @app.route("/call_llm2", methods=["POST"])
 def call_llm2():
     try:
