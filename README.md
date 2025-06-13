@@ -1,5 +1,7 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## v1.0 Finish
+
 ## feat: Add RPG Game Logic, Map Switching, and Optimize Code Structure
 
 * Affected Files  

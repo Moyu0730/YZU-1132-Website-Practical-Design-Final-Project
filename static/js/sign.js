@@ -55,7 +55,8 @@ function create_account() {
 function sql_login_account(){
     const data = {
         username: $("#login-username").val(),
-        password: $("#login-password").val()
+        password: $("#login-password").val(),
+        email: $("#login-email").val()
     };
 
     $.ajax({
@@ -86,8 +87,8 @@ function sql_create_account(){
     });
 }
 
-function login_account_reflect(return_data) {
-    return_data = JSON.parse(return_data);
+function login_account_reflect( return_data ){
+    return_data = JSON.parse( return_data );
 
     if (return_data.status == "success" ){
         $("#main-blank").html(  
@@ -101,7 +102,7 @@ function login_account_reflect(return_data) {
                     </div>
                 </div>
             `);
-        setCookie(return_data.nickname);
+        setCookie(return_data.nickname, return_data.username, return_data.password, return_data.email);
         setTimeout(function() {
             window.location.href = "/";
         }, 4500);
@@ -121,7 +122,7 @@ function login_account_reflect(return_data) {
                 </div>
             `);
         setTimeout(function() {
-            ajax_create();
+            window.location.href = "/sign";
         }, 3000);
     }
 }
@@ -141,7 +142,7 @@ function create_account_reflect(return_data) {
                     </div>
                 </div>
             `);
-        setCookie(return_data.nickname);
+        setCookie(return_data.nickname, return_data.username, return_data.password, return_data.email);
         setTimeout(function() {
             window.location.href = "/";
         }, 4500);
@@ -156,13 +157,7 @@ function create_account_reflect(return_data) {
                 </div>
             `);
         setTimeout(function() {
-            window.location.href = "/sign";
+            ajax_create();
         }, 3000);
     }
-}
-
-function setCookie(nickname){
-    const FIVE_DAYS = 60 * 60 * 24 * 5; // seconds in five days
-    const expires = new Date(Date.now() + FIVE_DAYS * 1000).toUTCString();
-    document.cookie = `nickname=${encodeURIComponent(nickname)}; expires=${expires}; path=/`;
 }

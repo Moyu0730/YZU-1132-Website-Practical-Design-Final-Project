@@ -2,9 +2,9 @@ import json
 
 from flask import Flask, redirect, render_template, request, make_response, jsonify
 from static.func.account import create_account
-from database.sql import sql_create_user, sql_query_user
+from database.sql import sql_create_user, sql_query_user, sql_query_coin_amount, sql_update_coin_amount
 from static.func.profile import open_profile
-from static.func.ajax import ajax_login, ajax_create
+from static.func.ajax import ajax_login, ajax_create, ajax_empty_message, ajax_trend
 from static.func.llm import get_finish_response, get_npc_response
 
 app = Flask(__name__)
@@ -14,13 +14,25 @@ def move_to_index():
     return render_template("index.html")
 
 
-# Start Profile
+# Start NavBar
+@app.route('/message', methods=['POST'])
+def move_to_message():
+    data = request.get_json()
+    result = ajax_empty_message(data)
+    return result
+
+@app.route('/trend', methods=['POST'])
+def move_to_trend():
+    data = request.get_json()
+    result = ajax_trend(data)
+    return result
+
 @app.route('/profile', methods=['POST'])
 def open_my_profile():
     data = request.get_json()
     result = open_profile(data)
     return result
-# End Profile
+# End NavBar
 
 
 # Start Sign and Log API
@@ -32,6 +44,9 @@ def move_to_sign():
 def move_to_logout():
     resp = make_response(redirect('/'))
     resp.delete_cookie('nickname', path='/', domain=None)
+    resp.delete_cookie('username', path='/', domain=None)
+    resp.delete_cookie('password', path='/', domain=None)
+    resp.delete_cookie('email', path='/', domain=None)
     return resp
 
 @app.route('/sign/create', methods=['GET'])
@@ -63,6 +78,18 @@ def sql_insert():
 def sql_query():
     data = request.get_json()
     result = sql_query_user(data)
+    return result
+
+@app.route('/api/sql_query_coin', methods=['POST'])
+def sql_query_coin():
+    data = request.get_json()
+    result = sql_query_coin_amount(data)
+    return result
+
+@app.route('/api/sql_update_coin', methods=['POST'])
+def sql_update_coin():
+    data = request.get_json()
+    result = sql_update_coin_amount(data)
     return result
 # End SQL API
 

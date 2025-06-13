@@ -15,7 +15,6 @@
         <link rel="stylesheet" href="../static/css/rpg.css">
         <link rel="stylesheet" href="../static/css/profile.css">
         <link rel="stylesheet" href="../static/css/calendar.css">
-        <link rel="stylesheet" href="../static/css/llm.css">
 
         <!-- JS -->
         <script src="../static/js/profile.js"></script>
@@ -60,9 +59,9 @@
                     <!-- start Navigation -->
                     <nav class="navigation border--bottom pt1" style="text-align: center;">
                         <ul class="no-bullets list--inline pb1 bold">
-                            <li class="small mr2"><a class="link link--text current" href="./">Character</a></li>
+                            <li class="small mr2"><a class="link link--text current" onclick="ajax_open_message()">Message</a></li>
                             <!-- <li class="small mr2"><a class="link link--text" href="./destinations.html">Skills</a></li> -->
-                            <li class="small mr2"><a class="link link--text" href="#trend" onclick="showCoinsChart()">Trend</a></li>
+                            <li class="small mr2"><a class="link link--text" onclick="ajax_open_trend()">Trend</a></li>
                             <li class="small mr2"><a class="link link--text" onclick="ajax_open_profile()">My Profile</a></li>
                             <li class="small" id="index-sign" data-logout-url="{{ url_for('move_to_logout') }}" data-sign-url="{{ url_for('move_to_sign') }}">
                                 <a class="link link--text" href="{{ url_for('move_to_sign') }}">Sign In</a>
@@ -76,56 +75,23 @@
                     <main class="content pt2 pb2" id="main-blank">
                         <h2 style="text-align: center;">Welcome</h2>
 
-                        <div style="display: flex; justify-content: center;">
-                            <div style="width: 40vw; min-width: 300px; margin: 20px;"> 
-                                <!-- 按鈕容器 -->
+                        <!-- <div style="display: flex; justify-content: center;">
+                            <div style="width: 40vw; min-width: 300px; margin: 20px;">
                                 <div style="display: flex; justify-content: flex-end;">
                                     <button id="closeChartBtn" onclick="hideCoinsChart()" style="padding: 8px 12px; background: #8B0000; color: white; border: none; border-radius: 4px; cursor: pointer; display: none;">關閉
                                     </button>
                                 </div>
-                                <!-- 圖表 -->
                                 <div id="coinsChart" style="width: 100%; height: 40vh; min-height: 200px; display: none; background: white; border: 1px solid #ccc;"></div>
                             </div>
-                        </div>
+                        </div> -->
+                        <br>
 
                         <!-- start Calendar -->
-                        <div id="calendar-canvas"></div>
-                        <div class="calendar-container">
-                            <div class="calendar-header">
-                                <h3 class="text--center" id="calendar-date" style="display: none;">Current Day: Day 1</h3>
-                                <div class="task-container" id="day-1"></div>
-                            </div>
-                        </div>
+                        <div id="calendar"></div>
                         <!-- end Calendar-->
                     </main>
                     <!-- end Main-blank -->
                 </div>
-
-
-                <!-- Navigation -->
-                <!-- <nav class="navigation border--bottom pt1">
-                    <ul class="no-bullets list--inline pb1 bold">
-                        <li class="small mr2"><a class="link link--text current" href="/">Character</a></li>
-                        <li class="small mr2"><a class="link link--text" href="/destinations.html">Destinations</a></li>
-                        <li class="small mr2"><a class="link link--text" href="/pricing.html">Pricing</a></li>
-                        <li class="small"><a class="link link--text" href="/contact.html">Contact</a></li>
-                    </ul>
-                </nav> -->
-                
-                
-                <!-- Page Content -->
-                <!-- <main class="content pt2 pb2">
-                    <h2>Who We Are</h2>
-                    <p>Quid turpius quam sapientis vitam ex insipientium sermone pendere? Et non ex maxima parte de tota iudicabis? Videamus igitur sententias eorum, tum ad verba redeamus. Quae sequuntur igitur?</p>
-                    <p>Ne tum quidem te respicies et cogitabis sibi quemque natum esse et suis voluptatibus? Et nunc quidem quod eam tuetur, ut de vite potissimum loquar, est id extrinsecus.</p>
-                    <p>Videamus igitur sententias eorum?</p>
-                </main> -->
-                
-                
-                <!-- Footer -->
-                <!-- <footer class="border--top pt1 pb1">
-                    <p class="text--gray small mb0">&copy; Copyright Viking Tours | Design by <a href="https://www.eatapapaya.com" class="link link--text">Papaya</a>.</p>
-                </footer> -->
             </div>
         </div>
         <!-- end Body -->

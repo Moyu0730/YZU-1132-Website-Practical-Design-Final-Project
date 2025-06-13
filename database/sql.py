@@ -33,6 +33,7 @@ DB_CONFIG = {
 }
 
 
+
 def get_db_connection():
     try:
         return psycopg2.connect(**DB_CONFIG)
@@ -40,14 +41,16 @@ def get_db_connection():
         return None
 
 
+
 def sql_create_user(data):
     nickname = data.get('nickname', '')
     username = data.get('username', '')
     email = data.get('email', '')
     password = data.get('password', '')
+
     query = """
-                INSERT INTO account (username, nickname, email, password)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO account (username, nickname, email, password, coin)
+                VALUES (%s, %s, %s, %s, '0')
     """
 
     conn = get_db_connection()
@@ -58,7 +61,7 @@ def sql_create_user(data):
         with conn.cursor() as cursor:
             cursor.execute(query, (username, nickname, email, password))
             conn.commit()
-            return json.dumps({'status': 'success', 'nickname': nickname, 'username': username})
+            return json.dumps({'status': 'success', 'nickname': nickname, 'username': username, 'email': email, 'password': password})
     except Exception as e:
         conn.rollback()
         return json.dumps({'status': 'error', 'message': 'Create User Failed', 'errortype': str(e)})
@@ -66,18 +69,20 @@ def sql_create_user(data):
         conn.close()
 
 
+
 def sql_query_user(data):
     username = data.get('username', '')
     password = data.get('password', '')
+    email = data.get('email', '')
 
     # Validate input data
-    validation_result = check_login_data(username, password)
+    validation_result = check_login_data(username, password, email)
     if validation_result != "Validation successful.":
         return json.dumps({'status': 'validate_error', 'message': validation_result})
 
     query = """
         SELECT * FROM account 
-        WHERE username = %s AND password = %s
+        WHERE username = %s AND password = %s AND email = %s
     """
 
     conn = get_db_connection()
@@ -86,16 +91,88 @@ def sql_query_user(data):
 
     try:
         with conn.cursor() as cursor:
-            cursor.execute(query, (username, password))
+            cursor.execute(query, (username, password, email))
             user = cursor.fetchone()
             if user:
-                # Assuming the columns are: id, username, nickname, email, password
+                # Assuming the columns are: id, username, nickname, email, password, coin
+                username = user[1]
                 nickname = user[2]
-                return json.dumps({'status': 'success', 'nickname': nickname})
+                email = user[3]
+                password = user[4]
+                return json.dumps({'status': 'success', 'nickname': nickname, 'username': username, 'email': email, 'password': password})
             else:
                 return json.dumps({'status': 'error', 'message': 'User Not Found'})
     except Exception as e:
         conn.rollback()
         return json.dumps({'status': 'error', 'message': 'Query User Failed', 'errortype': str(e)})
+    finally:
+        conn.close()
+
+
+
+def sql_query_coin_amount(data):
+    username = data.get('username', '')
+    password = data.get('password', '')
+    email = data.get('email', '')
+    
+    conn = get_db_connection()
+    if not conn:
+        return json.dumps({'status': 'error', 'message': 'Database Connection Failed'})
+    
+    query = """
+        SELECT * FROM account 
+        WHERE username = %s AND password = %s AND email = %s
+    """
+
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(query, (username, password, email))
+            user = cursor.fetchone()
+            if user:
+                # Assuming the columns are: id, username, nickname, email, password, coin
+                coin = user[5]
+                return json.dumps({'status': 'success', 'coin': coin})
+            else:
+                return json.dumps({'status': 'error', 'message': 'Coin User Not Found'})
+    except Exception as e:
+        conn.rollback()
+        return json.dumps({'status': 'error', 'message': 'Query Failed', 'errortype': str(e)})
+    finally:
+        conn.close()
+
+
+
+def sql_update_coin_amount(data):
+    username = data.get('username', '')
+    password = data.get('password', '')
+    email = data.get('email', '')
+    
+    try:
+        newValue = int(data.get('newValue', 0))
+    except (ValueError, TypeError):
+        return json.dumps({'status': 'error', 'message': 'Invalid coin value'})
+
+    conn = get_db_connection()
+    if not conn:
+        return json.dumps({'status': 'error', 'message': 'Database Connection Failed'})
+
+    query = """
+        UPDATE account 
+        SET coin = %s
+        WHERE username = %s AND password = %s AND email = %s
+    """
+
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(query, (newValue, username, password, email))
+            if cursor.rowcount > 0:
+                conn.commit()
+                return json.dumps({'status': 'success', 'message': 'Update Successful'})
+            else:
+                conn.rollback()
+                return json.dumps({'status': 'error', 'message': 'User Not Found'})
+    except Exception as e:
+        conn.rollback()
+        return json.dumps({'status': 'error', 'message': 'Query Failed', 'errortype': str(e)})
     finally:
         conn.close()

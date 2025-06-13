@@ -22,9 +22,11 @@ var playerBlock = {
     face: 0, //face: 0 - down, 1 - up, 2 - left, 3 - right
 };
 
+
+
 /********** API Handler **********/
 async function get_map(){
-    console.log("get_map() Called");
+    // console.log("get_map() Called");
 
     try{
         const response = await fetch('/api/rpg/get_map', {
@@ -44,17 +46,20 @@ async function get_map(){
     }
 }
 
+
+
 /******************** Initialize ********************/
 $(async function() {
-    console.log("Initialize Called");
+    // console.log("Initialize Called");
+
     ctx = $("#canvas-rpg")[0].getContext("2d");
     ctx.canvas.width = $("#canvas-rpg").width();
     ctx.canvas.height = $("#canvas-rpg").height();
 
     await get_map();
-    currentMapIndex = Math.floor(Math.random() * mapList.length);
+    currentMapIndex = Math.floor(Math.random() * mapList.length);    
     mapArray = mapList[currentMapIndex];
-    console.log("Initialize Current Map Array:", mapArray);
+    // console.log("Initialize Current Map Array:", mapArray);
     
     imgPlayer = new Image();
     imgPlayer.src = "../static/img/spriteSheet.png";
@@ -70,13 +75,23 @@ $(async function() {
     };
 
     drawMapObjects();
+    
+    // Calender
     init_calendar();
-    add_event("Game Started");
+    
+    // Init Trend
+    initCoinAmount();
+
+    add_message("Game Started");
 });
 
-// Function to switch to the next map
-function switchToNextMap() {
-    console.log("switchToNextMap() Called");
+
+
+/********** Map Switch Handler **********/
+async function switchToNextMap() {
+    // console.log("switchToNextMap() Called");
+
+    await get_map();
     let nextIndex;
 
     do{
@@ -93,8 +108,11 @@ function switchToNextMap() {
     drawMapObjects();
 }
 
+
+
+/********** Map Picture Initialize Handler **********/
 function loadImages( sources, callback ){
-    console.log("loadImages() Called");
+    // console.log("loadImages() Called");
 
     var loadedImages = 0;
     var numImages = 0;
@@ -113,8 +131,11 @@ function loadImages( sources, callback ){
     }
 }
 
+
+
+/********** Function to Find the Position of Player **********/
 function findPlayerStart( map ){
-    console.log("findPlayerStart() Called");
+    // console.log("findPlayerStart() Called");
 
     for( let x in map ){
         for( let y in map[x] ){
@@ -125,16 +146,22 @@ function findPlayerStart( map ){
     return { x: -1, y: -1 }; // Return an invalid position if not found
 }
 
-// Load all images first, then draw the map and main character
+
+
+/********** Map Picture Handler **********/
 function drawMapObjects(){
-    console.log("drawMapObjects() Called");
-    console.log("Current Map Array:", mapArray);
+    // console.log("drawMapObjects() Called");
+    // console.log("Current Map Array:", mapArray);
 
     for( let x in mapArray ){
         for( let y in mapArray[x] ){
-            console.log("Drawing at position:", x, y, "Value:", mapArray[x][y]);
-
-            if( mapArray[x][y] == 2 ){    // final 
+            // console.log("Drawing at position:", x, y, "Value:", mapArray[x][y]);
+            
+            if( mapArray[x][y] == 1 ){
+                loadImages(sources, function() {
+                    ctx.drawImage(imgPlayer, 0, 0, 80, 130, y * gridWidth, x * gridHeight, gridWidth, gridHeight);
+                });
+            }if( mapArray[x][y] == 2 ){    // final 
                 loadImages(sources, function(images) {
                     ctx.drawImage(images.Final, 0, 0, 165, 165 , y * gridWidth, x * gridHeight, gridWidth, gridHeight);
                 });
@@ -155,49 +182,35 @@ function drawMapObjects(){
     }
 }
 
-// Function to switch to the next map
-function switchToNextMap() {
-    console.log("switchToNextMap() Called");
 
-    let nextIndex;
-
-    do{
-        nextIndex = Math.floor( Math.random() * mapList.length );
-    }while( nextIndex == currentMapIndex );
-    
-    currentMapIndex = nextIndex;
-    mapArray = mapList[currentMapIndex];
-    playerBlock = findPlayerStart(mapArray);
-    currentImgMain.x = playerBlock.y * gridWidth;
-    currentImgMain.y = playerBlock.x * gridHeight;
-
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    drawMapObjects();
-}
 
 /********** Keydown Event Handler **********/
 $(document).on("keydown", function(event) {
     event.preventDefault();
-    console.log("Pressed key:", event.code);
+    // console.log("Pressed key:", event.code);
 
     let targetBlock = { x: -1, y: -1 };
     let nextBlock = { x: playerBlock.x, y: playerBlock.y };
     let cutImagePositionX;
 
-    switch(event.code) {
+    switch( event.code ){
         case "ArrowLeft":
+        case "KeyA":
             nextBlock.y--;
             cutImagePositionX = 175;
             break;
         case "ArrowUp":
+        case "KeyW":
             nextBlock.x--;
             cutImagePositionX = 355;
             break;
         case "ArrowRight":
+        case "KeyD":
             nextBlock.y++;
             cutImagePositionX = 540;
             break;
         case "ArrowDown":
+        case "KeyS":
             nextBlock.x++;
             cutImagePositionX = 0;
             break;
@@ -213,7 +226,7 @@ $(document).on("keydown", function(event) {
     ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
 
     if( targetBlock.x != -1 && targetBlock.y != -1 ){
-        console.log("Target Block Value:", mapArray[targetBlock.x][targetBlock.y]);
+        // console.log("Target Block Value:", mapArray[targetBlock.x][targetBlock.y]);
 
         switch( mapArray[targetBlock.x][targetBlock.y] ){
             case 0: // available
@@ -231,8 +244,8 @@ $(document).on("keydown", function(event) {
                 break;
             case 3: // NPC
                 $.post('/call_llm3', { context: "npc" })
-                    .done(data => add_event(data))
-                    .fail(error => add_event("ERROR : " + error.statusText));
+                    .done(data => add_message(data))
+                    .fail(error => add_message("ERROR : " + error.statusText));
                 break;
             case 4: // coin
                 currentImgMain.x = targetBlock.y * gridWidth;
@@ -240,15 +253,48 @@ $(document).on("keydown", function(event) {
                 playerBlock.x = targetBlock.x;
                 playerBlock.y = targetBlock.y;
                 ctx.clearRect(currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
+
+                // Trend Operation
+                var cntCoinAmount = getCoinAmount();
+
+                console.log("Old Coin Amount", cntCoinAmount);
+
+                updateCoinAmount( cntCoinAmount + 1 );
+                
+                console.log("New Coin Amount", getCoinAmount());
+
                 mapArray[targetBlock.x][targetBlock.y] = 0; // Remove coin from map
-                add_event("Coin Collected")
+                
+                add_message("Coin Collected");
                 break;
             case 5: // Obstacle
                 break;
             default:
-                add_event("Unknown!");
+                add_message("Unknown!");
         }
     }
     
     ctx.drawImage(imgPlayer, cutImagePositionX, 0, 80, 130, currentImgMain.x, currentImgMain.y, gridWidth, gridHeight);
 });
+
+
+
+/********** Keydown Event Handler **********/
+function ajax_open_message(){
+    const data = {
+        cntDayCount: get_day_count()
+    };
+
+    // console.log("cntDayCount", get_day_count());
+
+    $.ajax({
+        url: "/message",
+        data: JSON.stringify(data),
+        type: "POST",
+        contentType: "application/json",
+        success: function(output) {
+            $("#main-blank").html(output); 
+        },
+        error: function() { alert("ajax_open_message() Request failed."); }
+    });
+}

@@ -32,9 +32,9 @@ def validate(nickname, username, email, password):
             raise Exception("Password Must Contain Special Characters.")
 
         # Prevent SQL Injection
-        if (if_sql_injection(nickname) or if_sql_injection(username) or
-            if_sql_injection(email) or if_sql_injection(password)) and email != 'pass' and nickname != 'pass':
-            raise Exception("Stop Doing SQL Injection. \nWe Are Watching You.")
+        if ( if_sql_injection(nickname) or if_sql_injection(username) or
+             if_sql_injection(email) or if_sql_injection(password)) and email != 'pass' and nickname != 'pass':
+            raise Exception("Stop Doing SQL Injection. We're Watching You.")
 
         return "Validation successful."
     except Exception as e:
@@ -48,7 +48,7 @@ def if_sql_injection(input_str):
         r"' ?or ?'1'='1",
         r'" ?or ?"1"="1',
         r"' ?--",
-        r"--",
+        r"\-\-",
         r"; ?drop",
         r"union ?select",
         r"' ?or ?1=1",
