@@ -1,5 +1,55 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## feat: Add sql_query_coin_max API and Adjust Chart Indicator Upper Bound
+
+* Affected Files  
+    1. Modified  
+        * `database/sql.py` : Added new function for `sql_query_coin_max` API to retrieve the maximum coin amount among all users  
+        * `static/js/chart.js` : Changed indicator upper bound logic to use the highest coin amount from all users (fetched via the new API)
+        * `static/js/index.js` : Add `logout` function to reset `accCoinAmount` into visitor mode
+        * `app.py` : add `/api/sql_query_max_coin` for `sql_query_coin_max` API
+    2. Created : None  
+    3. Deleted : None  
+* Features  
+    1. **New API**: Added `sql_query_coin_max` API to backend for querying the maximum coin amount among all users  
+    2. **Chart.js Enhancement**: The indicator's upper bound in `chart.js` now dynamically reflects the highest coin amount among all users, improving accuracy and user experience
+* Project Progress Structure  
+    ```
+    YZU-1132-Website-Practical-Design-Final-Project/
+    ├── static/
+    │   ├── css/
+    │   │   ├── calendar.css
+    │   │   ├── production.css
+    │   │   ├── profile.css
+    │   │   ├── rpg.css
+    │   │   └── sign.css
+    │   ├── func/
+    │   │   ├── account.py
+    │   │   ├── ajax.py
+    │   │   ├── data.py
+    │   │   ├── llm.py
+    │   │   └── profile.py
+    │   ├── img/
+    │   └── js/
+    │       ├── calendar.js
+    │       ├── chart.js (Modified)
+    │       ├── index.js (Modified)
+    │       ├── profile.js
+    │       ├── rpg.js
+    │       └── sign.js
+    ├── material/
+    │   └── map.json
+    ├── templates/
+    │   ├── index.html
+    │   └── sign.html
+    ├── database/
+    │   └── sql.py (Modified)
+    ├── app.py (Modified)
+    ├── config.ini
+    ├── README.md (Modified)
+    └── .gitignore
+    ```
+
 ## v1.0 Finish
 
 ## feat: Add RPG Game Logic, Map Switching, and Optimize Code Structure

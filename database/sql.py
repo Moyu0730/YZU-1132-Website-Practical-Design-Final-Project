@@ -146,7 +146,7 @@ def sql_update_coin_amount(data):
     username = data.get('username', '')
     password = data.get('password', '')
     email = data.get('email', '')
-    
+
     try:
         newValue = int(data.get('newValue', 0))
     except (ValueError, TypeError):
@@ -171,6 +171,35 @@ def sql_update_coin_amount(data):
             else:
                 conn.rollback()
                 return json.dumps({'status': 'error', 'message': 'User Not Found'})
+    except Exception as e:
+        conn.rollback()
+        return json.dumps({'status': 'error', 'message': 'Query Failed', 'errortype': str(e)})
+    finally:
+        conn.close()
+
+
+
+def sql_query_max_coin_amount():
+
+    conn = get_db_connection()
+    if not conn:
+        return json.dumps({'status': 'error', 'message': 'Database Connection Failed'})
+
+    query = """
+        SELECT MAX(coin)
+        FROM account;
+    """
+
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(query)
+            result = cursor.fetchone()
+            maxvalue = result[0] if result else None
+
+            if maxvalue is not None:
+                return json.dumps({'status': 'success', 'message': 'Query Successful', 'result': maxvalue})
+            else:
+                return json.dumps({'status': 'error', 'message': 'No coin values found'})
     except Exception as e:
         conn.rollback()
         return json.dumps({'status': 'error', 'message': 'Query Failed', 'errortype': str(e)})

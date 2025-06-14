@@ -2,7 +2,7 @@ import json
 
 from flask import Flask, redirect, render_template, request, make_response, jsonify
 from static.func.account import create_account
-from database.sql import sql_create_user, sql_query_user, sql_query_coin_amount, sql_update_coin_amount
+from database.sql import sql_create_user, sql_query_user, sql_query_coin_amount, sql_update_coin_amount, sql_query_max_coin_amount
 from static.func.profile import open_profile
 from static.func.ajax import ajax_login, ajax_create, ajax_empty_message, ajax_trend
 from static.func.llm import get_finish_response, get_npc_response
@@ -90,6 +90,11 @@ def sql_query_coin():
 def sql_update_coin():
     data = request.get_json()
     result = sql_update_coin_amount(data)
+    return result
+
+@app.route('/api/sql_query_max_coin')
+def sql_query_max_coin():
+    result = sql_query_max_coin_amount()
     return result
 # End SQL API
 

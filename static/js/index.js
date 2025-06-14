@@ -18,6 +18,10 @@ const signContainer = document.getElementById('index-sign');
 
 if( signContainer ){
     const nickname = getCookie('nickname');
-    if( nickname != '' ) signContainer.innerHTML = `<a class="link link--text" href="${signContainer.dataset.logoutUrl}">${nickname}</a>`;
+    if( nickname != '' ) signContainer.innerHTML = `<a class="link link--text" href="${signContainer.dataset.logoutUrl}" onclick="logout()">${nickname}</a>`;
     else signContainer.innerHTML = `<a class="link link--text" href="${signContainer.dataset.signUrl}">Sign In</a>`;
+}
+
+function logout(){
+    initCoinAmount();
 }

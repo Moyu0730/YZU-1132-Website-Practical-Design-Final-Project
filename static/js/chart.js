@@ -1,22 +1,30 @@
-var accCoinAmount = 0;
+var accCoinAmount = 0, maxCoin;
+
+
 
 function initCoinAmount(){
     if( getCookie('username') != '' ) sql_query_coin();
     else accCoinAmount = 0;
+
+    sql_query_max_coin();
 }
+
+
 
 function updateCoinAmount( newAmount ){
     if( getCookie('username') != '' ) sql_update_coin( newAmount );
     else accCoinAmount = newAmount;
-
-    updateTrend( newAmount );
 }
+
+
 
 function getCoinAmount(){
     if( getCookie('username') != '' ) sql_query_coin();
 
     return accCoinAmount;
 }
+
+
 
 function sql_update_coin( newValue ){
     const data = {
@@ -36,12 +44,15 @@ function sql_update_coin( newValue ){
         success: function(output) {
             resp = JSON.parse( output );
             console.log(resp.message);
+            getCoinAmount();
+            sql_query_max_coin();
+            updateTrend(newValue);
         },
         error: function() { alert("sql_update_coin() Request failed."); }
     });
-
-    getCoinAmount();
 }
+
+
 
 function sql_query_coin(){
     const data = {
@@ -62,6 +73,22 @@ function sql_query_coin(){
         error: function() { alert("sql_query_coin() Request failed."); }
     });
 }
+
+
+
+function sql_query_max_coin(){
+    $.ajax({
+        url: "/api/sql_query_max_coin",
+        contentType: "application/json",
+        success: function(output) {
+            resp = JSON.parse( output );
+            maxCoin = Math.max(accCoinAmount, resp.result);
+        },
+        error: function() { alert("sql_query_max_coin() Request failed."); }
+    });
+}
+
+
 
 function ajax_open_trend(){
     const data = {
@@ -85,6 +112,8 @@ function ajax_open_trend(){
     });
 }
 
+
+
 function showCoinsChart() {
     console.log("showCoinsChart() Called");
 
@@ -97,13 +126,17 @@ function showCoinsChart() {
     
     dashboard.style.display = "block";
 
+    sql_query_max_coin();
+
     const data = [{
         type: "indicator",
         mode: "gauge+number",
         value: getCoinAmount(),
         gauge: {
-            axis: { 
-                range: [0, 100] 
+            axis: {
+                range: [0, maxCoin],
+                tickvals: [0, maxCoin * ( 1 / 4 ), maxCoin * ( 2 / 4 ), maxCoin * ( 3 / 4 ), maxCoin * ( 4 / 4 )],
+                ticktext: [0, maxCoin * ( 1 / 4 ), maxCoin * ( 2 / 4 ), maxCoin * ( 3 / 4 ), maxCoin * ( 4 / 4 )]
             },
             bar: { 
                 color: "#8B0000" 
@@ -112,13 +145,16 @@ function showCoinsChart() {
             borderwidth: 2,
             bordercolor: "#8B0000",
             steps: [
-                { range: [0, 25], color:"#6699FF" },
-                { range: [25, 50], color:"#66CC66" },
-                { range: [50, 75], color:"#FFCC66" },
-                { range: [75, 100], color:"#FF6666" }
+                { range: [maxCoin * ( 0 / 4 ), maxCoin * ( 1 / 4 )], color:"#6699FF" },
+                { range: [maxCoin * ( 1 / 4 ), maxCoin * ( 2 / 4 )], color:"#66CC66" },
+                { range: [maxCoin * ( 2 / 4 ), maxCoin * ( 3 / 4 )], color:"#FFCC66" },
+                { range: [maxCoin * ( 3 / 4 ), maxCoin * ( 4 / 4 )], color:"#FF6666" }
             ],
             threshold: {
-                line: { color: "black", width: 4 },
+                line: { 
+                    color: "black", 
+                    width: 4
+                },
                 thickness: 0.75,
                 value: getCoinAmount()
             }
@@ -153,7 +189,9 @@ function showCoinsChart() {
     });
 }
 
-function updateTrend( newValue ){
+
+
+async function updateTrend( newValue ){
     console.log("updateTrend() Called");
     console.log("newValue", newValue);
 
@@ -164,9 +202,53 @@ function updateTrend( newValue ){
         return;
     }
 
+    await new Promise((resolve, reject) => {
+        $.ajax({
+            url: "/api/sql_query_max_coin",
+            contentType: "application/json",
+            success: function(output) {
+                resp = JSON.parse(output);
+                maxCoin = Math.max(accCoinAmount, resp.result);
+                resolve();
+            },
+            error: function() { 
+                alert("sql_query_max_coin() Request failed."); 
+                reject();
+            }
+        });
+    });
+
+    console.log("Max Coin Value", maxCoin);
+
     const update = {
         value: newValue,
-        "gauge.threshold.value": newValue
+        gauge: {
+            axis: {
+                range: [0, maxCoin],
+                tickvals: [0, maxCoin * ( 1 / 4 ), maxCoin * ( 2 / 4 ), maxCoin * ( 3 / 4 ), maxCoin * ( 4 / 4 )],
+                ticktext: [0, maxCoin * ( 1 / 4 ), maxCoin * ( 2 / 4 ), maxCoin * ( 3 / 4 ), maxCoin * ( 4 / 4 )]
+            },
+            bar: { 
+                color: "#8B0000" 
+            },
+            bgcolor: "#F5F5F5",
+            borderwidth: 2,
+            bordercolor: "#8B0000",
+            steps: [
+                { range: [maxCoin * ( 0 / 4 ), maxCoin * ( 1 / 4 )], color:"#6699FF" },
+                { range: [maxCoin * ( 1 / 4 ), maxCoin * ( 2 / 4 )], color:"#66CC66" },
+                { range: [maxCoin * ( 2 / 4 ), maxCoin * ( 3 / 4 )], color:"#FFCC66" },
+                { range: [maxCoin * ( 3 / 4 ), maxCoin * ( 4 / 4 )], color:"#FF6666" }
+            ],
+            threshold: {
+                line: { 
+                    color: "black", 
+                    width: 4
+                },
+                thickness: 0.75,
+                value: getCoinAmount()
+            }
+        },
     };
 
     Plotly.update('dashboard', update);
