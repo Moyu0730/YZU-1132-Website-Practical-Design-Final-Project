@@ -14,6 +14,8 @@ function initCoinAmount(){
 function updateCoinAmount( newAmount ){
     if( getCookie('username') != '' ) sql_update_coin( newAmount );
     else accCoinAmount = newAmount;
+
+    updateTrend(newAmount);
 }
 
 
@@ -46,7 +48,6 @@ function sql_update_coin( newValue ){
             console.log(resp.message);
             getCoinAmount();
             sql_query_max_coin();
-            updateTrend(newValue);
             refreshCoinRank();
         },
         error: function() { alert("sql_update_coin() Request failed."); }
@@ -203,21 +204,23 @@ async function updateTrend( newValue ){
         return;
     }
 
-    await new Promise((resolve, reject) => {
-        $.ajax({
-            url: "/api/sql_query_max_coin",
-            contentType: "application/json",
-            success: function(output) {
-                resp = JSON.parse(output);
-                maxCoin = Math.max(accCoinAmount, resp.result);
-                resolve();
-            },
-            error: function() { 
-                alert("sql_query_max_coin() Request failed."); 
-                reject();
-            }
+    if( getCookie('nickname') != '' ){
+        await new Promise((resolve, reject) => {
+            $.ajax({
+                url: "/api/sql_query_max_coin",
+                contentType: "application/json",
+                success: function(output) {
+                    resp = JSON.parse(output);
+                    maxCoin = Math.max(accCoinAmount, resp.result);
+                    resolve();
+                },
+                error: function() { 
+                    alert("sql_query_max_coin() Request failed."); 
+                    reject();
+                }
+            });
         });
-    });
+    }
 
     console.log("Max Coin Value", maxCoin);
 
