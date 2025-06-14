@@ -1,5 +1,7 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## v2.0 Finish
+
 ## feat: Add sql_query_coin_max API and Adjust Chart Indicator Upper Bound
 
 * Affected Files  

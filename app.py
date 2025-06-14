@@ -2,9 +2,8 @@ import json
 
 from flask import Flask, redirect, render_template, request, make_response, jsonify
 from static.func.account import create_account
-from database.sql import sql_create_user, sql_query_user, sql_query_coin_amount, sql_update_coin_amount, sql_query_max_coin_amount
-from static.func.profile import open_profile
-from static.func.ajax import ajax_login, ajax_create, ajax_empty_message, ajax_trend
+from database.sql import sql_create_user, sql_query_user, sql_query_coin_amount, sql_update_coin_amount, sql_query_max_coin_amount, sql_query_coin_rank
+from static.func.ajax import ajax_login, ajax_create, ajax_empty_message, ajax_trend, ajax_open_profile
 from static.func.llm import get_finish_response, get_npc_response
 
 app = Flask(__name__)
@@ -30,7 +29,7 @@ def move_to_trend():
 @app.route('/profile', methods=['POST'])
 def open_my_profile():
     data = request.get_json()
-    result = open_profile(data)
+    result = ajax_open_profile(data)
     return result
 # End NavBar
 
@@ -95,6 +94,11 @@ def sql_update_coin():
 @app.route('/api/sql_query_max_coin')
 def sql_query_max_coin():
     result = sql_query_max_coin_amount()
+    return result
+
+@app.route('/api/sql_query_coin_rank')
+def sql_query_coin_rank_route():
+    result = sql_query_coin_rank()
     return result
 # End SQL API
 

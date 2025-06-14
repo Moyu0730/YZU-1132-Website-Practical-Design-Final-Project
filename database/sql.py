@@ -205,3 +205,45 @@ def sql_query_max_coin_amount():
         return json.dumps({'status': 'error', 'message': 'Query Failed', 'errortype': str(e)})
     finally:
         conn.close()
+
+def sql_query_coin_rank():
+
+    conn = get_db_connection()
+    if not conn:
+        return json.dumps({'status': 'error', 'message': 'Database Connection Failed'})
+
+    query = """
+        SELECT 
+            ROW_NUMBER() OVER (ORDER BY coin DESC) AS RankByCoin,
+            username,
+            nickname,
+            email,
+            coin
+        FROM account
+        ORDER BY coin DESC
+        LIMIT 3;
+    """
+
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(query)
+            results = cursor.fetchall()
+            if results:
+                # Build a list of dicts for each ranked user
+                rank_list = []
+                for row in results:
+                    rank_list.append({
+                        'rank': row[0],
+                        'username': row[1],
+                        'nickname': row[2],
+                        'email': row[3],
+                        'coin': row[4]
+                    })
+                return json.dumps({'status': 'success', 'message': 'Query Successful', 'result': rank_list})
+            else:
+                return json.dumps({'status': 'error', 'message': 'No coin values found'})
+    except Exception as e:
+        conn.rollback()
+        return json.dumps({'status': 'error', 'message': 'Query Failed', 'errortype': str(e)})
+    finally:
+        conn.close()

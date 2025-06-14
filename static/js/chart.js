@@ -47,6 +47,7 @@ function sql_update_coin( newValue ){
             getCoinAmount();
             sql_query_max_coin();
             updateTrend(newValue);
+            refreshCoinRank();
         },
         error: function() { alert("sql_update_coin() Request failed."); }
     });
