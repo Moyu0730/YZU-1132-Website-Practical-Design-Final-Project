@@ -1,23 +1,39 @@
-.calendar-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 6px;
-    font-size: 1.1em;
-}
-.calendar-col {
-    padding: 0 5px;
-}
 .separator {
     padding: 0 5px;
     color: #aaa;
 }
-.event {
-    margin-left: 12px;
-    /* background: #e3f2fd;
-     */
-    border-radius: 3px;
-    padding: 0 4px;
-    font-size: 0.97em;
-    width: 100%;
-    display: inline-block;
+
+.calendar-message {
+    position: relative;
+    background: #428bca;
+    width: 95%;
+    font-size: 20px;
+    font-weight: 400;
+    border-radius: .4em;
+    padding: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.calendar-message:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-left-color: #428bca;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: -10px;
+    margin-right: -20px;
+}
+
+.footer-text {
+    text-align: right;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 5px;
+    padding-right: 30px;
 }

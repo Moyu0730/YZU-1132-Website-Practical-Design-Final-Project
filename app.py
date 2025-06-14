@@ -1,8 +1,9 @@
-from flask import Flask, redirect, render_template, request, make_response
+import json
+
+from flask import Flask, redirect, render_template, request, make_response, jsonify
 from static.func.account import create_account
-from database.sql import sql_create_user, sql_query_user
-from static.func.profile import open_profile
-from static.func.ajax import ajax_login, ajax_create
+from database.sql import sql_create_user, sql_query_user, sql_query_coin_amount, sql_update_coin_amount, sql_query_max_coin_amount, sql_query_coin_rank
+from static.func.ajax import ajax_login, ajax_create, ajax_empty_message, ajax_trend, ajax_open_profile
 from static.func.llm import get_finish_response, get_npc_response
 
 app = Flask(__name__)
@@ -12,13 +13,25 @@ def move_to_index():
     return render_template("index.html")
 
 
-# Start Profile
+# Start NavBar
+@app.route('/message', methods=['POST'])
+def move_to_message():
+    data = request.get_json()
+    result = ajax_empty_message(data)
+    return result
+
+@app.route('/trend', methods=['POST'])
+def move_to_trend():
+    data = request.get_json()
+    result = ajax_trend(data)
+    return result
+
 @app.route('/profile', methods=['POST'])
 def open_my_profile():
     data = request.get_json()
-    result = open_profile(data)
+    result = ajax_open_profile(data)
     return result
-# End Profile
+# End NavBar
 
 
 # Start Sign and Log API
@@ -30,6 +43,9 @@ def move_to_sign():
 def move_to_logout():
     resp = make_response(redirect('/'))
     resp.delete_cookie('nickname', path='/', domain=None)
+    resp.delete_cookie('username', path='/', domain=None)
+    resp.delete_cookie('password', path='/', domain=None)
+    resp.delete_cookie('email', path='/', domain=None)
     return resp
 
 @app.route('/sign/create', methods=['GET'])
@@ -62,10 +78,47 @@ def sql_query():
     data = request.get_json()
     result = sql_query_user(data)
     return result
+
+@app.route('/api/sql_query_coin', methods=['POST'])
+def sql_query_coin():
+    data = request.get_json()
+    result = sql_query_coin_amount(data)
+    return result
+
+@app.route('/api/sql_update_coin', methods=['POST'])
+def sql_update_coin():
+    data = request.get_json()
+    result = sql_update_coin_amount(data)
+    return result
+
+@app.route('/api/sql_query_max_coin')
+def sql_query_max_coin():
+    result = sql_query_max_coin_amount()
+    return result
+
+@app.route('/api/sql_query_coin_rank')
+def sql_query_coin_rank_route():
+    result = sql_query_coin_rank()
+    return result
 # End SQL API
 
-# Start LLM API
+# Start RPG and RPG API
+@app.route('/api/rpg/get_map', methods=['GET'])
+def get_map_data():
+    try:
+        with open('material/map.json', 'r', encoding='utf-8') as map_json_file:
+            mapList = json.load(map_json_file)
+        return jsonify(mapList)
+    except FileNotFoundError:
+        return jsonify({'error': 'Map file not found'}), 404
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Invalid JSON format'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+# End RPG aand RPG API
 
+
+# Start LLM API
 @app.route("/call_llm2", methods=["POST"])
 def call_llm2():
     try:

@@ -1,5 +1,108 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+## v2.0 Finish
+
+## feat: Add sql_query_coin_max API and Adjust Chart Indicator Upper Bound
+
+* Affected Files  
+    1. Modified  
+        * `database/sql.py` : Added new function for `sql_query_coin_max` API to retrieve the maximum coin amount among all users  
+        * `static/js/chart.js` : Changed indicator upper bound logic to use the highest coin amount from all users (fetched via the new API)
+        * `static/js/index.js` : Add `logout` function to reset `accCoinAmount` into visitor mode
+        * `app.py` : add `/api/sql_query_max_coin` for `sql_query_coin_max` API
+    2. Created : None  
+    3. Deleted : None  
+* Features  
+    1. **New API**: Added `sql_query_coin_max` API to backend for querying the maximum coin amount among all users  
+    2. **Chart.js Enhancement**: The indicator's upper bound in `chart.js` now dynamically reflects the highest coin amount among all users, improving accuracy and user experience
+* Project Progress Structure  
+    ```
+    YZU-1132-Website-Practical-Design-Final-Project/
+    ├── static/
+    │   ├── css/
+    │   │   ├── calendar.css
+    │   │   ├── production.css
+    │   │   ├── profile.css
+    │   │   ├── rpg.css
+    │   │   └── sign.css
+    │   ├── func/
+    │   │   ├── account.py
+    │   │   ├── ajax.py
+    │   │   ├── data.py
+    │   │   ├── llm.py
+    │   │   └── profile.py
+    │   ├── img/
+    │   └── js/
+    │       ├── calendar.js
+    │       ├── chart.js (Modified)
+    │       ├── index.js (Modified)
+    │       ├── profile.js
+    │       ├── rpg.js
+    │       └── sign.js
+    ├── material/
+    │   └── map.json
+    ├── templates/
+    │   ├── index.html
+    │   └── sign.html
+    ├── database/
+    │   └── sql.py (Modified)
+    ├── app.py (Modified)
+    ├── config.ini
+    ├── README.md (Modified)
+    └── .gitignore
+    ```
+
+## v1.0 Finish
+
+## feat: Add RPG Game Logic, Map Switching, and Optimize Code Structure
+
+* Affected Files  
+    1. Modified  
+        * `static/js/rpg.js` : Refactored to fetch map data via API instead of importing from a JS file  
+        * `app.py` : Added `/api/rpg/get_map` endpoint to serve map data securely from the backend  
+        * `templates/index.html` : Ensured frontend loads RPG as before, but now fetches map data via API  
+    2. Created
+        * `material/map.json` : New location for all RPG map data (moved from `static/js/rpg-map.js`)  
+    3. Deleted  
+        * `static/js/rpg-map.js` : Removed, as map data is now securely stored in the backend
+        * `static/js/randopm.js` : Generate random value within lower and upper bound
+* Features  
+    1. Map data is no longer exposed in the frontend JS, preventing users from easily accessing or modifying map layouts  
+    2. RPG map data is now stored in `material/map.json` and served via a Flask API endpoint
+    3. **Code Structure Optimization** : Frontend RPG logic now fetches map data asynchronously, improving maintainability and separation of concerns  
+    4. **No Breaking Changes** : RPG game logic and user experience remain unchanged, but map data is now protected and easier to manage  
+* Project Progress Structure  
+    ```
+    YZU-1132-Website-Practical-Design-Final-Project/
+    ├── static/
+    │   ├── css/
+    │   │   ├── production.css
+    │   │   ├── rpg.css
+    │   │   ├── profile.css
+    │   │   └── calendar.css
+    │   ├── js/
+    │   │   ├── index.js
+    │   │   ├── rpg.js (Modified)
+    │   │   ├── chart.js (Modified)
+    │   │   ├── calendar.js (Modified)
+    │   │   └── profile.js
+    │   ├── func/
+    │   │   ├── account.py
+    │   │   └── profile.py
+    │   └── img/
+    ├── material/
+    │   └── map.json (Created)
+    ├── templates/
+    │   ├── index.html (Modified)
+    │   └── sign.html
+    ├── database/
+    │   └── sql.py
+    ├── app.py (Modified)
+    ├── config.ini
+    ├── README.md
+    └── .gitignore
+    ```
+
 ## feat: Add AJAX-based Login and Account Creation with PostgreSQL Integration
 
 * Affected Files

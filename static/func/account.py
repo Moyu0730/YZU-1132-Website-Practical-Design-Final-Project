@@ -62,13 +62,12 @@ def create_account(data):
             </div>
             """
         case _:
-            safe_result = str(result).replace('<', '&lt;').replace('>', '&gt;')
             html = f"""
             <h2 style="text-align: center;">Invalid Input</h2>
             <div class="border--full rounded pt1 pb1 pr2 pl2 mb1">
                 <div class="grid-row">
                     <div class="grid-column align--center-on-tiny">
-                        <p class="mb0 bold" style="text-align: center">{safe_result}</p>
+                        <p class="mb0 bold" style="text-align: center">{result}</p>
                     </div>
                 </div>
             </div>
@@ -81,20 +80,19 @@ def create_account(data):
 
 
 # Start login
-def check_login_data(username, password):
-    result = validate('pass', username, 'pass', password)
+def check_login_data(username, password, email):
+    result = validate('pass', username, email, password)
 
     match result:
         case "Validation successful.":
             return 'Validation successful.'
         case _:
-            safe_result = str(result).replace('<', '&lt;').replace('>', '&gt;')
             html = f"""
             <h2 style="text-align: center;">Invalid Input</h2>
             <div class="border--full rounded pt1 pb1 pr2 pl2 mb1">
                 <div class="grid-row">
                     <div class="grid-column align--center-on-tiny">
-                        <p class="mb0 bold" style="text-align: center">{safe_result}</p>
+                        <p class="mb0 bold" style="text-align: center">{result}</p>
                     </div>
                 </div>
             </div>
