@@ -1,5 +1,7 @@
 # YZU-1132-Website-Practical-Design-Final-Project
 
+# Project Finished
+
 ## bugfix: Coins picked by visitor will not accumulate
 
 ## v2.0 Finish
